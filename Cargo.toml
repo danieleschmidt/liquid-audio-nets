@@ -17,7 +17,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # Core dependencies
-nalgebra = { version = "0.32", default-features = false, features = ["libm"] }
+nalgebra = { version = "0.33", default-features = false, features = ["libm"] }
 ndarray = { version = "0.15", default-features = false }
 num-traits = { version = "0.2", default-features = false, features = ["libm"] }
 libm = "0.2"
