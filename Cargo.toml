@@ -33,7 +33,7 @@ panic-halt = { version = "0.2", optional = true }
 
 # Python bindings
 pyo3 = { version = "0.20", optional = true, features = ["extension-module"] }
-numpy = { version = "0.20", optional = true }
+numpy = { version = "0.25", optional = true }
 
 # Serialization
 serde = { version = "1.0", default-features = false, features = ["derive"] }
