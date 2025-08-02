@@ -1,0 +1,134 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "security:openssf-scorecard"
+  ],
+  "timezone": "UTC",
+  "schedule": ["before 6am on monday"],
+  "labels": ["dependencies"],
+  "assignees": ["@danieleschmidt"],
+  "reviewers": ["@danieleschmidt"],
+  
+  "packageRules": [
+    {
+      "matchManagers": ["pip_requirements", "pip_setup"],
+      "matchPackageNames": ["torch", "torchaudio"],
+      "groupName": "pytorch",
+      "schedule": ["before 8am on monday"]
+    },
+    {
+      "matchManagers": ["cargo"],
+      "matchPackageNames": ["tokio", "serde"],
+      "groupName": "core-rust",
+      "schedule": ["before 8am on monday"]
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "dev-dependencies",
+      "schedule": ["before 10am on monday"]
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "schedule": ["before 6am on monday"],
+      "pinDigests": true
+    },
+    {
+      "matchPackagePatterns": ["^@types/"],
+      "groupName": "typescript-types",
+      "schedule": ["before 10am on monday"]
+    }
+  ],
+  
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "schedule": ["at any time"],
+    "labels": ["security", "vulnerability"],
+    "assignees": ["@danieleschmidt"],
+    "reviewers": ["@danieleschmidt"],
+    "prPriority": 10
+  },
+  
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "branchConcurrentLimit": 5,
+  
+  "commitMessagePrefix": "chore(deps):",
+  "commitMessageAction": "update",
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageExtra": "to {{newVersion}}",
+  
+  "prTitle": "chore(deps): {{commitMessageAction}} {{commitMessageTopic}} {{commitMessageExtra}}",
+  
+  "prBodyTemplate": "This PR updates {{depName}} from {{currentVersion}} to {{newVersion}}.\n\n### Release Notes\n{{#if hasReleaseNotes}}\n{{releaseNotes}}\n{{else}}\nNo release notes available.\n{{/if}}\n\n### Configuration\n📅 **Schedule**: {{schedule}}\n🚦 **Automerge**: {{automerge}}\n♻ **Rebasing**: {{rebaseWhen}}\n🔕 **Ignore**: {{#if isIgnored}}This dependency is ignored{{else}}Close this PR and you won't be reminded about this update again{{/if}}\n\n---\n\n{{footer}}",
+  
+  "automerge": false,
+  "platformAutomerge": false,
+  
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 4am on monday"],
+    "commitMessageAction": "refresh",
+    "commitMessageTopic": "lock file",
+    "prTitle": "chore(deps): refresh lock file"
+  },
+  
+  "cargo": {
+    "enabled": true,
+    "rangeStrategy": "bump"
+  },
+  
+  "pip_requirements": {
+    "enabled": true,
+    "fileMatch": ["(^|/)requirements.*\\.txt$"]
+  },
+  
+  "pip_setup": {
+    "enabled": true,
+    "fileMatch": ["(^|/)pyproject\\.toml$", "(^|/)setup\\.py$"]
+  },
+  
+  "dockerfile": {
+    "enabled": true,
+    "pinDigests": true
+  },
+  
+  "github-actions": {
+    "enabled": true,
+    "pinDigests": true
+  },
+  
+  "regexManagers": [
+    {
+      "fileMatch": ["(^|/)Dockerfile$"],
+      "matchStrings": [
+        "ARG PYTHON_VERSION=(?<currentValue>.*?)\\n"
+      ],
+      "depNameTemplate": "python",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": ["(^|/)rust-toolchain\\.toml$"],
+      "matchStrings": [
+        "channel = \"(?<currentValue>.*?)\""
+      ],
+      "depNameTemplate": "rust",
+      "datasourceTemplate": "github-releases",
+      "lookupNameTemplate": "rust-lang/rust"
+    }
+  ],
+  
+  "ignoreDeps": [
+    "node",
+    "npm"
+  ],
+  
+  "ignorePaths": [
+    "**/target/**",
+    "**/build/**",
+    "**/dist/**",
+    "**/__pycache__/**",
+    "**/node_modules/**"
+  ]
+}
