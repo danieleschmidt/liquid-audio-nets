@@ -1,0 +1,75 @@
+# Testing container for liquid-audio-nets CI/CD
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies for testing
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    curl \
+    pkg-config \
+    python3 \
+    python3-pip \
+    python3-venv \
+    libasound2-dev \
+    libpulse-dev \
+    portaudio19-dev \
+    gcc-arm-none-eabi \
+    gdb-multiarch \
+    openocd \
+    valgrind \
+    # For audio testing
+    ffmpeg \
+    # For hardware simulation
+    qemu-system-arm \
+    # For security testing
+    cppcheck \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust with testing components
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Add Rust components and targets
+RUN rustup component add clippy rustfmt llvm-tools-preview
+RUN rustup target add thumbv7em-none-eabihf thumbv6m-none-eabi
+
+# Install Rust testing tools
+RUN cargo install cargo-audit cargo-deny cargo-tarpaulin grcov
+
+# Install Python testing dependencies
+RUN python3 -m pip install --upgrade pip setuptools wheel
+RUN pip3 install \
+    pytest>=7.0.0 \
+    pytest-cov>=4.0.0 \
+    pytest-benchmark>=4.0.0 \
+    pytest-timeout>=2.1.0 \
+    pytest-xdist>=3.0.0 \
+    pytest-html>=3.0.0 \
+    pytest-mock>=3.10.0 \
+    coverage[toml]>=7.0.0 \
+    tox>=4.0.0 \
+    black>=23.0.0 \
+    ruff>=0.1.0 \
+    mypy>=1.0.0 \
+    bandit>=1.7.0 \
+    safety>=2.0.0 \
+    pre-commit>=3.0.0
+
+# Install additional testing tools
+RUN pip3 install \
+    hypothesis>=6.0.0 \
+    freezegun>=1.0.0 \
+    responses>=0.20.0 \
+    factory-boy>=3.0.0
+
+# Set up workspace
+WORKDIR /workspace
+
+# Copy test configuration
+COPY pytest.ini tox.ini .pre-commit-config.yaml ./
+
+# Default command runs full test suite
+CMD ["tox"]
+EOF < /dev/null

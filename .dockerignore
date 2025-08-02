@@ -1,0 +1,77 @@
+# Version control
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.venv
+venv
+env
+
+# Rust
+target/
+Cargo.lock
+*.orig
+
+# C/C++
+build/
+*.o
+*.a
+*.so
+*.dll
+*.exe
+
+# Documentation
+docs/_build
+*.pdf
+
+# IDE
+.vscode/settings.json
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+
+# Large files
+*.wav
+*.mp3
+*.flac
+models/*.lnn
+datasets/
+data/
+
+# Logs
+*.log
+logs/
+
+# Development
+.env
+.env.local
+.env.development
+.env.test
+
+# Docker
+.dockerignore
+Dockerfile*
+docker-compose*
+
+# CI/CD
+.github/
+EOF < /dev/null
