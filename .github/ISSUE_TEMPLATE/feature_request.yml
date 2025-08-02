@@ -1,0 +1,173 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement for liquid-audio-nets
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature! Please provide as much detail as possible to help us understand and evaluate your request.
+
+  - type: checkboxes
+    id: preliminary
+    attributes:
+      label: Preliminary Checks
+      options:
+        - label: I have searched existing issues and discussions to avoid duplicates
+          required: true
+        - label: I have read the [ROADMAP.md](../../docs/ROADMAP.md) to check if this is already planned
+          required: true
+        - label: This feature aligns with the project goals (ultra-low-power audio processing)
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What use case are you trying to address?
+      placeholder: |
+        I'm trying to... but currently liquid-audio-nets doesn't support...
+        This would be useful for...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your ideal solution in detail
+      placeholder: |
+        I would like to see...
+        The API could work like...
+        This would integrate with...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component Area
+      description: Which part of liquid-audio-nets would this feature affect?
+      options:
+        - Core LNN Algorithm
+        - Python Training Framework
+        - Rust Library
+        - C/C++ Bindings
+        - Embedded Deployment
+        - Documentation
+        - Build System
+        - Testing Infrastructure
+        - Performance Optimization
+        - Hardware Integration
+        - Model Compression
+        - Audio Preprocessing
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to you?
+      options:
+        - Critical (Blocking my project)
+        - High (Would significantly improve my workflow)
+        - Medium (Nice to have improvement)
+        - Low (Minor enhancement)
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What alternatives have you considered? What workarounds are you currently using?
+      placeholder: |
+        I've tried...
+        Current workaround is...
+        Other tools do this by...
+    validations:
+      required: false
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Ideas
+      description: Do you have ideas about how this could be implemented? (Technical details welcome)
+      placeholder: |
+        This could be implemented by...
+        Similar to how X does it...
+        Might require changes to...
+    validations:
+      required: false
+
+  - type: textarea
+    id: api_example
+    attributes:
+      label: API Design Example
+      description: Show how you envision the API would work (code examples)
+      render: python
+      placeholder: |
+        # Example usage
+        import liquid_audio_nets as lan
+        
+        # Your proposed API here
+        model = lan.LNN()
+        model.new_feature(...)
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints & Requirements
+      description: Check all that apply
+      options:
+        - label: Must work on embedded devices (ARM Cortex-M)
+        - label: Must maintain ultra-low power consumption
+        - label: Must preserve real-time performance
+        - label: Must support existing model formats
+        - label: Must maintain backward compatibility
+        - label: Should work across Python/Rust/C++ APIs
+        - label: Requires new dependencies (specify in description)
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Expected Impact
+      description: How would this feature benefit the project and its users?
+      placeholder: |
+        This would enable...
+        Users could...
+        Performance improvements...
+        Broader adoption because...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Contribution Interest
+      description: Would you be interested in contributing to this feature?
+      options:
+        - "Yes, I can implement this"
+        - "Yes, I can help with testing/feedback"
+        - "Yes, I can help with documentation"
+        - "Maybe, with guidance"
+        - "No, but I can provide requirements"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, mockups, references, or examples
+      placeholder: |
+        Links to papers, similar implementations, mockups...
+        Additional technical details...
+    validations:
+      required: false

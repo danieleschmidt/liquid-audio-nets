@@ -1,0 +1,156 @@
+name: 🐛 Bug Report
+description: Report a bug in liquid-audio-nets
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please fill out the sections below to help us reproduce and fix the issue.
+
+  - type: checkboxes
+    id: preliminary
+    attributes:
+      label: Preliminary Checks
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I have read the [CONTRIBUTING.md](../../CONTRIBUTING.md) guide
+          required: true
+        - label: This issue is specific to liquid-audio-nets (not a general ML/audio question)
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the behavior
+      placeholder: |
+        1. Initialize model with...
+        2. Call function...
+        3. Observe error...
+      value: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen
+      placeholder: Describe expected behavior...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened (include error messages)
+      placeholder: Describe actual behavior...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which platform are you using?
+      options:
+        - Python (x86_64)
+        - Python (ARM64)
+        - Rust (x86_64)
+        - Rust (ARM64)
+        - C/C++ (x86_64)
+        - C/C++ (ARM64)
+        - Embedded (ARM Cortex-M)
+        - Embedded (RISC-V)
+        - Other (specify in description)
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Which version of liquid-audio-nets are you using?
+      placeholder: v0.1.0, main branch, commit hash...
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: |
+        Provide relevant environment information:
+        - OS and version
+        - Python/Rust/C++ version
+        - Hardware details (especially for embedded)
+        - Audio hardware info
+      placeholder: |
+        OS: Ubuntu 22.04
+        Python: 3.11.2
+        Hardware: STM32F407
+        Audio: MEMS microphone, 16kHz
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Minimal Code Example
+      description: Minimal code to reproduce the issue
+      render: python
+      placeholder: |
+        import liquid_audio_nets as lan
+        
+        # Your minimal example here
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Full error logs or stack traces
+      render: text
+      placeholder: Paste error logs here...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact Level
+      description: How severe is this bug?
+      options:
+        - Critical (System crashes, data loss)
+        - High (Major functionality broken)
+        - Medium (Feature partially broken)
+        - Low (Minor issue, workaround available)
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or relevant information
+      placeholder: Add any other context about the problem here...
+    validations:
+      required: false

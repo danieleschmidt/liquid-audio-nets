@@ -1,0 +1,241 @@
+name: 🔧 Embedded Support Request
+description: Request support for new embedded platforms or hardware configurations
+title: "[EMBEDDED] "
+labels: ["embedded", "hardware", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hardware support requests help us prioritize embedded platform development. Please provide detailed hardware specifications.
+
+  - type: checkboxes
+    id: preliminary
+    attributes:
+      label: Preliminary Checks
+      options:
+        - label: I have checked the [supported platforms documentation](../../docs/ARCHITECTURE.md)
+          required: true
+        - label: I have searched for existing requests for this hardware
+          required: true
+        - label: This hardware meets minimum requirements (ARM Cortex-M4+ or equivalent)
+          required: true
+
+  - type: dropdown
+    id: request_type
+    attributes:
+      label: Request Type
+      description: What kind of embedded support do you need?
+      options:
+        - New MCU/Platform Support
+        - Audio Hardware Integration
+        - Power Management Features
+        - Development Board Support
+        - Custom Hardware Integration
+        - Optimization for Existing Platform
+        - Hardware Abstraction Layer
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware_specs
+    attributes:
+      label: Hardware Specifications
+      description: Detailed hardware specifications
+      placeholder: |
+        MCU: STM32H743VIT6
+        Architecture: ARM Cortex-M7
+        Clock Speed: 400 MHz
+        RAM: 1 MB SRAM + 16 MB SDRAM
+        Flash: 2 MB
+        FPU: Single & Double precision
+        DSP Instructions: Yes
+        DMA: 16 channels
+        Audio Peripherals: SAI, I2S, PDM
+    validations:
+      required: true
+
+  - type: textarea
+    id: audio_hardware
+    attributes:
+      label: Audio Hardware Details
+      description: Audio capture and processing hardware
+      placeholder: |
+        Microphone: Digital MEMS (ICS-43434)
+        ADC: 24-bit, up to 48kHz
+        Audio Codec: None/CS4272/etc.
+        Sampling Rate: 16kHz
+        Bit Depth: 16-bit
+        Channels: Mono/Stereo
+        Audio Processing: Hardware filters, AGC, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: power_constraints
+    attributes:
+      label: Power Constraints
+      description: Power requirements and constraints
+      placeholder: |
+        Operating Voltage: 3.3V
+        Power Source: CR2032 battery / Harvesting / USB
+        Target Battery Life: 1 year
+        Sleep Mode Current: <10 μA
+        Active Mode Budget: <2 mW
+        Power Management: PMIC details
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use Case Description
+      description: What will you use liquid-audio-nets for on this platform?
+      placeholder: |
+        Application: Smart doorbell with wake word detection
+        Audio Tasks: Voice activity detection, keyword spotting
+        Performance Requirements: <1mW, <20ms latency
+        Operating Environment: Indoor, -10°C to +60°C
+        Production Volume: Expected quantities
+    validations:
+      required: true
+
+  - type: dropdown
+    id: development_board
+    attributes:
+      label: Development Board
+      description: Is there a development board available?
+      options:
+        - Official vendor development board
+        - Third-party development board
+        - Custom evaluation board
+        - Production hardware only
+        - No development board available
+    validations:
+      required: true
+
+  - type: textarea
+    id: board_details
+    attributes:
+      label: Development Board Details
+      description: Information about available development boards
+      placeholder: |
+        Board Name: NUCLEO-H743ZI2
+        Vendor: STMicroelectronics
+        Price: $25
+        Availability: Widely available
+        Audio Expansion: X-NUCLEO-CCA02M2
+        Debugger: ST-Link v3
+        Documentation: Link to user manual
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: toolchain
+    attributes:
+      label: Available Toolchain Support
+      description: Which development tools are available? (Check all that apply)
+      options:
+        - GCC cross-compiler
+        - Vendor-specific IDE (Keil, IAR, etc.)
+        - CMake support
+        - Rust target support
+        - OpenOCD/Segger debugging
+        - Hardware documentation
+        - SDK/HAL libraries
+        - Audio driver examples
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this platform support to you?
+      options:
+        - Critical (Blocking production deployment)
+        - High (Preferred platform for new project)
+        - Medium (Evaluation/prototyping)
+        - Low (Nice to have for future)
+    validations:
+      required: true
+
+  - type: textarea
+    id: timeline
+    attributes:
+      label: Timeline Requirements
+      description: When do you need this support?
+      placeholder: |
+        Project timeline: Q2 2025 production
+        Evaluation phase: Next 3 months
+        Development phase: 6 months
+        Prototype deadline: mm/dd/yyyy
+    validations:
+      required: false
+
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Contribution Capability
+      description: Can you contribute to the development/testing?
+      options:
+        - "Yes, I can provide hardware for testing"
+        - "Yes, I can help with implementation"
+        - "Yes, I can provide testing feedback"
+        - "Maybe, with guidance"
+        - "No, but I can provide requirements"
+    validations:
+      required: true
+
+  - type: textarea
+    id: testing_support
+    attributes:
+      label: Testing Support
+      description: How can you help with testing and validation?
+      placeholder: |
+        Hardware availability: Can provide 2x dev boards
+        Testing capabilities: Power measurement, audio analysis
+        Timeline: Available for 3-month testing period
+        Feedback quality: Detailed reports, measurements
+        Remote access: Can provide SSH/debug access
+    validations:
+      required: false
+
+  - type: textarea
+    id: documentation
+    attributes:
+      label: Documentation & Resources
+      description: Links to relevant documentation and resources
+      placeholder: |
+        Datasheet: https://...
+        Reference Manual: https://...
+        HAL Documentation: https://...
+        Audio Examples: https://...
+        Community Forums: https://...
+    validations:
+      required: false
+
+  - type: textarea
+    id: similar_platforms
+    attributes:
+      label: Similar Supported Platforms
+      description: Are there any currently supported platforms that are similar?
+      placeholder: |
+        Similar to STM32F4 but with...
+        Same family as nRF52 but...
+        Hardware is compatible with...
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: |
+        Special requirements...
+        Regulatory considerations...
+        Market opportunity...
+        Technical challenges...
+    validations:
+      required: false

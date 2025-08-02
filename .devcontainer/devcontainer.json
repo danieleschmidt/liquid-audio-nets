@@ -1,5 +1,5 @@
 {
-  "name": "Liquid Audio Nets Development",
+  "name": "liquid-audio-nets",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
   
   "features": {
@@ -7,7 +7,8 @@
       "version": "3.11"
     },
     "ghcr.io/devcontainers/features/rust:1": {
-      "version": "1.70"
+      "version": "latest",
+      "profile": "default"
     },
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
@@ -15,55 +16,79 @@
       "installOhMyZsh": true
     },
     "ghcr.io/devcontainers/features/git:1": {
-      "ppa": true,
       "version": "latest"
     }
   },
-  
+
+  "containerEnv": {
+    "RUST_BACKTRACE": "1",
+    "CARGO_TERM_COLOR": "always"
+  },
+
+  "runArgs": [
+    "--privileged"
+  ],
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-python.python",
-        "ms-python.black-formatter",
-        "charliermarsh.ruff",
-        "ms-python.mypy-type-checker",
         "rust-lang.rust-analyzer",
-        "vadimcn.vscode-lldb",
-        "ms-vscode.cmake-tools",
+        "ms-python.python",
+        "ms-python.pylint",
+        "ms-python.black-formatter",
         "ms-vscode.cpptools",
-        "twxs.cmake",
-        "ms-vscode.makefile-tools",
+        "ms-vscode.cmake-tools",
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-vscode.vscode-json",
         "redhat.vscode-yaml",
-        "tamasfe.even-better-toml",
-        "davidanson.vscode-markdownlint",
-        "ms-azuretools.vscode-docker",
-        "github.copilot"
+        "esbenp.prettier-vscode",
+        "ms-vscode.hexeditor",
+        "marus25.cortex-debug",
+        "dan-c-underwood.arm",
+        "webfreak.debug"
       ],
       "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
         "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "python.linting.enabled": true,
-        "python.linting.ruffEnabled": true,
         "python.formatting.provider": "black",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "rust-analyzer.cargo.buildScripts.enable": true,
         "rust-analyzer.checkOnSave.command": "clippy",
-        "cmake.configureOnOpen": false,
+        "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+        "cmake.configureOnOpen": true,
         "files.associations": {
-          "*.lnn": "json"
-        },
-        "terminal.integrated.defaultProfile.linux": "zsh"
+          "*.lnn": "json",
+          "*.toml": "toml"
+        }
       }
     }
   },
-  
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-  
-  "mounts": [
-    "source=${localWorkspaceFolder}/.git,target=/workspace/.git,type=bind,consistency=cached"
-  ],
-  
+
   "forwardPorts": [
     8000,
-    8080
+    8080,
+    3000
   ],
-  
+
+  "portsAttributes": {
+    "8000": {
+      "label": "Documentation Server",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Development Server",
+      "onAutoForward": "notify"
+    },
+    "3000": {
+      "label": "Monitoring Dashboard",
+      "onAutoForward": "notify"
+    }
+  },
+
   "remoteUser": "vscode"
 }
+EOF < /dev/null

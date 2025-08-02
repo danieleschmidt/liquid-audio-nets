@@ -1,32 +1,46 @@
-# Global code owners
-* @maintainer-team
+# Global owners
+* @danieleschmidt
 
-# Language-specific ownership
-*.rs @rust-team
-*.py @python-team @ml-team
-*.{c,cpp,h,hpp} @embedded-team @rust-team
-*.{cmake,CMakeLists.txt} @embedded-team
+# Core Rust library
+/src/ @danieleschmidt
+/Cargo.toml @danieleschmidt
 
-# Configuration and tooling
-/.github/ @devops-team
-/scripts/ @devops-team @security-team
-/docs/ @docs-team @maintainer-team
-/monitoring/ @devops-team @sre-team
-.pre-commit-config.yaml @devops-team
-renovate.json @devops-team
-.github/dependabot.yml @devops-team
+# Python bindings and training
+/python/ @danieleschmidt
+/pyproject.toml @danieleschmidt
 
-# Security-sensitive files
-/scripts/security_check.py @security-team
-.secrets.baseline @security-team
-SECURITY.md @security-team
+# C/C++ embedded library
+/include/ @danieleschmidt
+/cpp/ @danieleschmidt
+/CMakeLists.txt @danieleschmidt
 
-# Build and deployment
-Cargo.toml @rust-team @maintainer-team
-pyproject.toml @python-team @maintainer-team
-CMakeLists.txt @embedded-team @maintainer-team
-Dockerfile.dev @devops-team
-docker-compose.yml @devops-team
+# Documentation
+/docs/ @danieleschmidt
+/README.md @danieleschmidt
+*.md @danieleschmidt
 
-# Testing
-/tests/ @maintainer-team @qa-team
+# Build and CI/CD
+/.github/ @danieleschmidt
+/scripts/ @danieleschmidt
+/Makefile @danieleschmidt
+/.devcontainer/ @danieleschmidt
+
+# Tests
+/tests/ @danieleschmidt
+
+# Embedded and hardware-specific
+/embedded/ @danieleschmidt
+/examples/embedded/ @danieleschmidt
+
+# Performance and benchmarking
+/benchmarks/ @danieleschmidt
+/tests/performance/ @danieleschmidt
+
+# Security
+/SECURITY.md @danieleschmidt
+/.github/workflows/security*.yml @danieleschmidt
+
+# Release and packaging
+/packaging/ @danieleschmidt
+/.github/workflows/cd.yml @danieleschmidt
+/CHANGELOG.md @danieleschmidt

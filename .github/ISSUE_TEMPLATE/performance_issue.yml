@@ -1,0 +1,219 @@
+name: ⚡ Performance Issue
+description: Report performance problems, power consumption issues, or optimization opportunities
+title: "[PERFORMANCE] "
+labels: ["performance", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Performance issues are critical for liquid-audio-nets! Please provide detailed measurements and profiling data.
+
+  - type: checkboxes
+    id: preliminary
+    attributes:
+      label: Preliminary Checks
+      options:
+        - label: I have profiled the code to identify the bottleneck
+          required: true
+        - label: I have tested with latest version of liquid-audio-nets
+          required: true
+        - label: I have checked existing performance issues and benchmarks
+          required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Performance Issue Type
+      description: What kind of performance problem are you experiencing?
+      options:
+        - High Power Consumption
+        - Slow Inference Time
+        - High Memory Usage
+        - Poor Accuracy vs Performance Trade-off
+        - Embedded Device Limitations
+        - Training Performance
+        - Model Loading/Initialization
+        - Real-time Processing Issues
+        - Other (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue Description
+      description: Detailed description of the performance problem
+      placeholder: |
+        The model is consuming...
+        Inference time is...
+        Expected vs actual performance...
+    validations:
+      required: true
+
+  - type: textarea
+    id: measurements
+    attributes:
+      label: Performance Measurements
+      description: Provide concrete measurements (power, latency, memory, etc.)
+      placeholder: |
+        Power consumption: X mW (expected: Y mW)
+        Inference time: X ms (expected: Y ms)
+        Memory usage: X KB (expected: Y KB)
+        Battery life: X hours (expected: Y hours)
+        CPU utilization: X%
+    validations:
+      required: true
+
+  - type: dropdown
+    id: target_platform
+    attributes:
+      label: Target Platform
+      description: Which platform is experiencing the issue?
+      options:
+        - ARM Cortex-M4
+        - ARM Cortex-M7
+        - ARM Cortex-M33
+        - ARM Cortex-A (embedded Linux)
+        - x86_64 Desktop/Server
+        - ARM64 Desktop/Server
+        - RISC-V
+        - Other embedded MCU
+        - Multiple platforms
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware Details
+      description: Specific hardware information
+      placeholder: |
+        MCU: STM32F407VGT6
+        Clock Speed: 168 MHz
+        RAM: 192 KB
+        Flash: 1 MB
+        Audio Hardware: MEMS mic, 16kHz sampling
+        Power Supply: 3.3V, CR2032 battery
+    validations:
+      required: true
+
+  - type: textarea
+    id: model_config
+    attributes:
+      label: Model Configuration
+      description: Model details and configuration
+      placeholder: |
+        Model size: X KB
+        Input features: MFCC, 40 dims
+        Hidden dims: 64
+        Output classes: 10
+        Quantization: int8/float32
+        Adaptive timestep config: min=1ms, max=50ms
+    validations:
+      required: true
+
+  - type: textarea
+    id: profiling
+    attributes:
+      label: Profiling Data
+      description: Include profiling output, power measurements, or benchmarking results
+      render: text
+      placeholder: |
+        Function call breakdown:
+        - feature_extraction: 15ms (45%)
+        - ode_solver: 12ms (36%)
+        - output_layer: 6ms (18%)
+        
+        Power breakdown:
+        - Core computation: 0.8mW
+        - Memory access: 0.3mW
+        - Peripherals: 0.1mW
+    validations:
+      required: false
+
+  - type: textarea
+    id: code_example
+    attributes:
+      label: Code Example
+      description: Minimal code to reproduce the performance issue
+      render: python
+      placeholder: |
+        import liquid_audio_nets as lan
+        import time
+        
+        model = lan.LNN.load("model.lnn")
+        audio = generate_test_audio()
+        
+        start = time.time()
+        result = model.process(audio)
+        elapsed = time.time() - start
+        print(f"Processing time: {elapsed*1000:.2f}ms")
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Impact Severity
+      description: How severely does this affect your application?
+      options:
+        - Critical (Makes the library unusable)
+        - High (Significantly impacts battery life/usability)
+        - Medium (Noticeable but manageable)
+        - Low (Minor optimization opportunity)
+    validations:
+      required: true
+
+  - type: textarea
+    id: expectations
+    attributes:
+      label: Performance Expectations
+      description: What performance levels do you expect and why?
+      placeholder: |
+        Based on the paper/documentation, I expected...
+        My application requires...
+        Industry benchmarks suggest...
+    validations:
+      required: true
+
+  - type: textarea
+    id: comparison
+    attributes:
+      label: Comparison with Alternatives
+      description: How does this compare to other solutions you've tried?
+      placeholder: |
+        TensorFlow Lite Micro: X mW, Y ms
+        Other LNN implementations: ...
+        Traditional DSP approach: ...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: optimization_areas
+    attributes:
+      label: Potential Optimization Areas
+      description: Which areas do you think could be optimized? (Check all that apply)
+      options:
+        - ODE solver algorithm/implementation
+        - Feature extraction (FFT/MFCC)
+        - Memory allocation/access patterns
+        - CMSIS-DSP optimization
+        - Model quantization
+        - Adaptive timestep control
+        - Power management
+        - Compiler optimizations
+        - Hardware-specific optimizations
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information, links to similar issues, etc.
+      placeholder: |
+        Related papers/benchmarks...
+        Similar issues in other projects...
+        Potential solutions you've considered...
+    validations:
+      required: false
