@@ -1,0 +1,57 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'liquid-audio-nets'
+          static_configs:
+            - targets: ['localhost:8080']
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+  
+  resource:
+    attributes:
+      - key: service.name
+        value: liquid-audio-nets
+        action: upsert
+      - key: service.version
+        from_attribute: version
+        action: upsert
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+  
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+  
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch, resource]
+      exporters: [jaeger, logging]
+    
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [batch, resource]
+      exporters: [prometheus, logging]
+    
+    logs:
+      receivers: [otlp]
+      processors: [batch, resource]
+      exporters: [logging]
