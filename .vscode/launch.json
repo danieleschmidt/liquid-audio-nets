@@ -1,73 +1,55 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": false,
-            "env": {
-                "PYTHONPATH": "${workspaceFolder}/python"
-            }
-        },
-        {
-            "name": "Python: Tests",
-            "type": "python",
-            "request": "launch",
-            "module": "pytest",
-            "args": ["tests/", "-v"],
-            "console": "integratedTerminal",
-            "justMyCode": false
-        },
-        {
-            "name": "Rust: Debug Tests",
-            "type": "lldb",
-            "request": "launch",
-            "cargo": {
-                "args": ["test", "--no-run", "--bin=${workspaceFolder}"],
-                "filter": {
-                    "name": "${workspaceFolder}",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "Rust: Debug Current",
-            "type": "lldb",
-            "request": "launch",
-            "cargo": {
-                "args": ["build", "--bin=${workspaceFolder}"],
-                "filter": {
-                    "name": "${workspaceFolder}",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "C++: Debug Current File",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/${fileBasenameNoExtension}",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "cmake-build"
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Python Tests",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "-v"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug Python Module",
+      "type": "python", 
+      "request": "launch",
+      "module": "liquid_audio_nets",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+    },
+    {
+      "name": "Debug Rust Tests",
+      "type": "lldb",
+      "request": "launch",
+      "cargo": {
+        "args": ["test", "--no-run", "--bin=${workspaceFolder}"],
+        "filter": {
+          "name": "${workspaceFolder}",
+          "kind": "bin"
         }
-    ]
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug Embedded Target (STM32)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "executable": "target/thumbv7em-none-eabihf/debug/examples/basic",
+      "name": "Debug (OpenOCD)",
+      "device": "STM32F407VG",
+      "configFiles": [
+        "interface/stlink-v2.cfg",
+        "target/stm32f4x.cfg"
+      ],
+      "svdFile": "STM32F407.svd",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "raw"
+    }
+  ]
 }
+EOF < /dev/null

@@ -1,102 +1,121 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build-all",
-            "type": "shell",
-            "command": "make",
-            "args": ["build"],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "test-all",
-            "type": "shell",
-            "command": "make",
-            "args": ["test"],
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            }
-        },
-        {
-            "label": "cmake-build",
-            "type": "shell",
-            "command": "make",
-            "args": ["build-cpp"],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": ["$gcc"]
-        },
-        {
-            "label": "rust-check",
-            "type": "shell",
-            "command": "cargo",
-            "args": ["check"],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": ["$rustc"]
-        },
-        {
-            "label": "python-test",
-            "type": "shell",
-            "command": "python",
-            "args": ["-m", "pytest", "tests/", "-v"],
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            }
-        },
-        {
-            "label": "format-all",
-            "type": "shell",
-            "command": "make",
-            "args": ["format"],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared"
-            }
-        },
-        {
-            "label": "lint-all",
-            "type": "shell",
-            "command": "make",
-            "args": ["lint"],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            }
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Cargo Build",
+      "type": "cargo",
+      "command": "build",
+      "args": ["--all-features"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": ["$rustc"]
+    },
+    {
+      "label": "Cargo Test",
+      "type": "cargo",
+      "command": "test",
+      "args": ["--all-features"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": ["$rustc"]
+    },
+    {
+      "label": "Python Tests",
+      "type": "shell",
+      "command": "pytest",
+      "args": ["tests/", "-v"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build Documentation",
+      "type": "shell",
+      "command": "make",
+      "args": ["docs"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Lint All",
+      "type": "shell",
+      "command": "make",
+      "args": ["lint"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Format All",
+      "type": "shell",
+      "command": "make",
+      "args": ["format"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Flash Embedded (STM32)",
+      "type": "shell",
+      "command": "make",
+      "args": ["flash-stm32"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "dependsOn": "Cargo Build Embedded"
+    },
+    {
+      "label": "Cargo Build Embedded",
+      "type": "cargo",
+      "command": "build",
+      "args": [
+        "--target",
+        "thumbv7em-none-eabihf",
+        "--no-default-features",
+        "--features",
+        "embedded"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": ["$rustc"]
+    }
+  ]
 }
+EOF < /dev/null

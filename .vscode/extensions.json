@@ -1,0 +1,22 @@
+{
+  "recommendations": [
+    "rust-lang.rust-analyzer",
+    "ms-python.python",
+    "ms-python.pylint",
+    "ms-python.black-formatter",
+    "ms-vscode.cpptools",
+    "ms-vscode.cmake-tools",
+    "github.copilot",
+    "github.copilot-chat",
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml",
+    "esbenp.prettier-vscode",
+    "ms-vscode.hexeditor",
+    "marus25.cortex-debug",
+    "dan-c-underwood.arm",
+    "webfreak.debug",
+    "ms-vscode.test-adapter-converter",
+    "hbenl.vscode-test-explorer"
+  ]
+}
+EOF < /dev/null
