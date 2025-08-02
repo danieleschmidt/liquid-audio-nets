@@ -1,0 +1,159 @@
+{
+  "project": "liquid-audio-nets",
+  "version": "1.0.0",
+  "last_updated": "2025-08-02",
+  "metrics": {
+    "development": {
+      "languages": {
+        "rust": {
+          "lines_of_code": 0,
+          "test_coverage": 0,
+          "complexity_score": 0,
+          "documentation_coverage": 0
+        },
+        "python": {
+          "lines_of_code": 0,
+          "test_coverage": 0,
+          "complexity_score": 0,
+          "documentation_coverage": 0
+        },
+        "cpp": {
+          "lines_of_code": 0,
+          "test_coverage": 0,
+          "complexity_score": 0,
+          "documentation_coverage": 0
+        }
+      },
+      "total_lines_of_code": 0,
+      "total_test_coverage": 0,
+      "average_complexity": 0,
+      "documentation_ratio": 0
+    },
+    "quality": {
+      "security_issues": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "last_scan": null
+      },
+      "dependency_vulnerabilities": {
+        "python": 0,
+        "rust": 0,
+        "github_actions": 0,
+        "last_check": null
+      },
+      "code_quality_score": 0,
+      "technical_debt_hours": 0,
+      "lint_warnings": 0,
+      "lint_errors": 0
+    },
+    "testing": {
+      "unit_tests": {
+        "total": 0,
+        "passing": 0,
+        "failing": 0,
+        "coverage": 0
+      },
+      "integration_tests": {
+        "total": 0,
+        "passing": 0,
+        "failing": 0,
+        "coverage": 0
+      },
+      "performance_tests": {
+        "total": 0,
+        "passing": 0,
+        "failing": 0,
+        "benchmark_regressions": 0
+      },
+      "embedded_tests": {
+        "total": 0,
+        "passing": 0,
+        "failing": 0,
+        "platforms_tested": []
+      }
+    },
+    "performance": {
+      "benchmarks": {
+        "inference_latency_ms": {
+          "target": 20,
+          "current": null,
+          "trend": "stable"
+        },
+        "power_consumption_mw": {
+          "target": 2.0,
+          "current": null,
+          "trend": "stable"
+        },
+        "memory_usage_kb": {
+          "target": 128,
+          "current": null,
+          "trend": "stable"
+        },
+        "accuracy_percent": {
+          "target": 95.0,
+          "current": null,
+          "trend": "stable"
+        }
+      },
+      "regression_count": 0,
+      "improvement_count": 0
+    },
+    "deployment": {
+      "build_success_rate": 0,
+      "deployment_frequency": 0,
+      "lead_time_hours": 0,
+      "mttr_hours": 0,
+      "change_failure_rate": 0
+    },
+    "community": {
+      "contributors": 0,
+      "active_contributors_30d": 0,
+      "pull_requests": {
+        "open": 0,
+        "merged_30d": 0,
+        "average_review_time_hours": 0
+      },
+      "issues": {
+        "open": 0,
+        "closed_30d": 0,
+        "average_resolution_time_hours": 0
+      },
+      "stars": 0,
+      "forks": 0,
+      "downloads": {
+        "pypi_monthly": 0,
+        "crates_io_monthly": 0,
+        "docker_pulls": 0
+      }
+    },
+    "documentation": {
+      "pages_count": 0,
+      "completeness_score": 0,
+      "freshness_score": 0,
+      "api_documentation_coverage": 0,
+      "examples_count": 0,
+      "outdated_links": 0
+    }
+  },
+  "targets": {
+    "test_coverage": 80,
+    "documentation_coverage": 90,
+    "security_issues": 0,
+    "performance_regression_threshold": 5,
+    "build_success_rate": 95,
+    "average_review_time_hours": 24,
+    "issue_resolution_time_hours": 72
+  },
+  "tracking": {
+    "collection_frequency": "daily",
+    "reporting_frequency": "weekly",
+    "alert_thresholds": {
+      "test_coverage_drop": 5,
+      "security_issues_increase": 1,
+      "performance_regression": 10,
+      "build_failure_rate": 10
+    }
+  }
+}
