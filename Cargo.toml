@@ -31,9 +31,9 @@ cortex-m = { version = "0.7", optional = true }
 cortex-m-rt = { version = "0.7", optional = true }
 panic-halt = { version = "0.2", optional = true }
 
-# Python bindings
-pyo3 = { version = "0.25", optional = true, features = ["extension-module"] }
-numpy = { version = "0.20", optional = true }
+# Python bindings  
+pyo3 = { version = "0.22", optional = true, features = ["extension-module"] }
+numpy = { version = "0.22", optional = true }
 
 # Serialization
 serde = { version = "1.0", default-features = false, features = ["derive"] }
@@ -62,13 +62,14 @@ opt-level = 0
 [profile.bench]
 debug = true
 
-[[bench]]
-name = "lnn_inference"
-harness = false
+# Benchmarks will be added later
+# [[bench]]
+# name = "lnn_inference"
+# harness = false
 
-[[bench]]
-name = "adaptive_timestep"
-harness = false
+# [[bench]]
+# name = "adaptive_timestep"
+# harness = false
 
 [package.metadata.docs.rs]
 all-features = true
