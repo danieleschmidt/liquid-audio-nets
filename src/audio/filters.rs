@@ -4,7 +4,7 @@ use crate::{Result, LiquidAudioError};
 use serde::{Deserialize, Serialize};
 
 #[cfg(not(feature = "std"))]
-use alloc::{vec::Vec, string::String};
+use core::alloc::{vec::Vec, string::String};
 
 /// Preprocessing filter for audio data
 #[derive(Debug, Clone, Serialize, Deserialize)]

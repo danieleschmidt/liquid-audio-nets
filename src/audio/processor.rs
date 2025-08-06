@@ -5,7 +5,7 @@ use crate::audio::{FeatureExtractor, AudioFormat, PreprocessingFilter, FilterCha
 use crate::core::{LNN, ProcessingResult, AdaptiveConfig};
 
 #[cfg(not(feature = "std"))]
-use alloc::{vec::Vec, string::String};
+use core::alloc::{vec::Vec, string::String};
 
 /// High-level audio processor with robust error handling
 #[derive(Debug)]

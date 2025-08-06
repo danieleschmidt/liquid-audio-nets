@@ -3,7 +3,8 @@
 //! Edge-efficient Liquid Neural Network models for always-on audio sensing.
 //! 
 //! This crate provides ultra-low-power neural network implementations optimized
-//! for ARM Cortex-M microcontrollers and edge devices.
+//! for ARM Cortex-M microcontrollers and edge devices with advanced scaling,
+//! optimization, and deployment capabilities.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -14,7 +15,7 @@ extern crate std;
 extern crate alloc;
 
 #[cfg(not(feature = "std"))]
-use alloc::{vec::Vec, string::String, vec};
+use core::alloc::{vec::Vec, string::String, vec};
 
 #[cfg(not(feature = "std"))]
 use alloc::string::ToString;
@@ -52,7 +53,7 @@ pub struct ModelConfig {
     pub model_type: String,
 }
 
-/// Minimal ProcessingResult
+/// Enhanced ProcessingResult
 #[derive(Debug, Clone)]
 pub struct ProcessingResult {
     pub output: Vec<f32>,
@@ -61,6 +62,7 @@ pub struct ProcessingResult {
     pub power_mw: f32,
     pub complexity: f32,
     pub liquid_energy: f32,
+    pub metadata: Option<String>,
 }
 
 /// Main error type
@@ -73,6 +75,9 @@ pub enum LiquidAudioError {
     IoError(String),
     InvalidInput(String),
     SecurityError(String),
+    ResourceExhausted(String),
+    InvalidState(String),
+    ThreadError(String),
 }
 
 impl core::fmt::Display for LiquidAudioError {
@@ -85,6 +90,9 @@ impl core::fmt::Display for LiquidAudioError {
             LiquidAudioError::IoError(msg) => write!(f, "I/O error: {}", msg),
             LiquidAudioError::InvalidInput(msg) => write!(f, "Invalid input: {}", msg),
             LiquidAudioError::SecurityError(msg) => write!(f, "Security error: {}", msg),
+            LiquidAudioError::ResourceExhausted(msg) => write!(f, "Resource exhausted: {}", msg),
+            LiquidAudioError::InvalidState(msg) => write!(f, "Invalid state: {}", msg),
+            LiquidAudioError::ThreadError(msg) => write!(f, "Thread error: {}", msg),
         }
     }
 }
@@ -294,6 +302,7 @@ impl LNN {
             power_mw: self.power_mw,
             complexity: energy.sqrt(),
             liquid_energy: energy,
+            metadata: Some("generation3_optimized".to_string()),
         })
     }
 
@@ -319,6 +328,7 @@ impl LNN {
                     power_mw: 0.8,     // Conservative power estimate
                     complexity: safe_energy.sqrt(),
                     liquid_energy: safe_energy,
+                    metadata: Some("error_recovery".to_string()),
                 })
             }
             LiquidAudioError::InvalidInput(_) => {
@@ -423,13 +433,47 @@ impl LNN {
     }
 }
 
+// Implement AudioModel trait for LNN
+impl AudioModel for LNN {
+    fn process_audio(&mut self, audio_buffer: &[f32]) -> Result<ProcessingResult> {
+        self.process(audio_buffer)
+    }
+    
+    fn current_power_mw(&self) -> f32 {
+        self.current_power_mw()
+    }
+    
+    fn reset(&mut self) {
+        self.reset_state();
+    }
+    
+    fn model_type(&self) -> &str {
+        &self.config.model_type
+    }
+    
+    fn is_ready(&self) -> bool {
+        true // LNN is always ready after creation
+    }
+}
+
 /// Library version
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-/// Diagnostics and health monitoring
+/// Core modules
 pub mod diagnostics;
+pub mod models;
+
+// Generation 3: Advanced scaling and optimization modules
+pub mod cache;
+pub mod optimization;
+pub mod concurrent;
+pub mod scaling;
+pub mod pretrained;
+pub mod deployment;
+pub mod benchmark;
 
 pub use diagnostics::{DiagnosticsCollector, HealthReport, HealthStatus, Logger};
+pub use models::{AudioModel, ModelFactory};
 
 // Panic handler for no_std mode
 #[cfg(not(feature = "std"))]

@@ -6,7 +6,7 @@
 use crate::{Result, LiquidAudioError, ModelConfig, ProcessingResult};
 
 #[cfg(not(feature = "std"))]
-use alloc::{vec::Vec, string::String};
+use core::alloc::{vec::Vec, string::String};
 
 /// Health status levels
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

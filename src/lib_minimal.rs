@@ -11,7 +11,7 @@ extern crate std;
 extern crate alloc;
 
 #[cfg(not(feature = "std"))]
-use alloc::{vec::Vec, string::String, format};
+use core::alloc::{vec::Vec, string::String, format};
 
 /// Minimal AdaptiveConfig for compilation
 #[derive(Debug, Clone, Copy)]

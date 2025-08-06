@@ -6,7 +6,7 @@ use crate::audio::{AudioProcessor, FeatureExtractor};
 use crate::adaptive::TimestepController;
 
 #[cfg(not(feature = "std"))]
-use alloc::{vec::Vec, string::String};
+use core::alloc::{vec::Vec, string::String};
 use core::fmt;
 
 use nalgebra::{DVector, DMatrix};
