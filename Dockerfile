@@ -4,7 +4,7 @@ ARG PYTHON_VERSION=3.11
 # ==========================================
 # Build stage: Compile Rust and C++ components
 # ==========================================
-FROM ubuntu:22.04 AS builder
+FROM ubuntu:24.04 AS builder
 
 # Prevent interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
