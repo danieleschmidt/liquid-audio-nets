@@ -80,11 +80,7 @@ def embedded_test_data():
     }
 
 
-# Markers for different test categories
-pytest.register_marker("slow", "marks tests as slow (deselect with '-m \"not slow\"')")
-pytest.register_marker("integration", "marks tests as integration tests")
-pytest.register_marker("embedded", "marks tests requiring embedded hardware")
-pytest.register_marker("gpu", "marks tests requiring GPU")
+# Markers are now configured in pytest.ini
 
 
 def pytest_configure(config):

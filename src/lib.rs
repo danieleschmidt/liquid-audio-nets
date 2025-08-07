@@ -472,8 +472,16 @@ pub mod pretrained;
 pub mod deployment;
 pub mod benchmark;
 
+// Global-first modules for international deployment
+pub mod i18n;
+pub mod compliance;
+pub mod regions;
+
 pub use diagnostics::{DiagnosticsCollector, HealthReport, HealthStatus, Logger};
 pub use models::{AudioModel, ModelFactory};
+pub use i18n::{Language, MessageKey, I18nManager, set_global_language, t, t_error};
+pub use compliance::{PrivacyFramework, ComplianceConfig, PrivacyManager};
+pub use regions::{Region, RegionalConfig, RegionalManager, PerformanceProfile};
 
 // Panic handler for no_std mode
 #[cfg(not(feature = "std"))]

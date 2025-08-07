@@ -33,6 +33,15 @@ class LNN:
         self._config: Optional[AdaptiveConfig] = None
         self._current_power_mw = 0.0
         
+        # Initialize with default model config for testing
+        self._model_config = {
+            'input_dim': 40,
+            'hidden_dim': 64, 
+            'output_dim': 10,
+            'sample_rate': 16000,
+            'frame_size': 256
+        }
+        
         if model_path:
             self.load(model_path)
     
