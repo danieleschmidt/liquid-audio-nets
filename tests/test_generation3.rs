@@ -81,6 +81,7 @@ fn test_memory_pool() {
     let vec2 = pool.get_vector(200);
     
     let stats = pool.get_stats();
+    let initial_pool_size = stats.pool_size;
     assert_eq!(stats.allocations, 2);
     assert!(stats.pool_size <= 3);
     
@@ -90,7 +91,7 @@ fn test_memory_pool() {
     
     let stats_after = pool.get_stats();
     assert_eq!(stats_after.returns, 2);
-    assert!(stats_after.pool_size >= stats.pool_size);
+    assert!(stats_after.pool_size >= initial_pool_size);
 }
 
 #[test]
@@ -243,6 +244,7 @@ fn test_auto_scaler() {
         min_scale: 1,
         max_scale: 5,
         target_cpu_utilization: 0.7,
+        target_queue_depth: 100,
         scale_up_threshold: 0.8,
         scale_down_threshold: 0.3,
         cooldown_ms: 0, // No cooldown for testing
@@ -614,7 +616,7 @@ fn test_performance_optimizer_maintenance() {
         model_type: "maintenance_test".to_string(),
     };
     
-    let cache_key = optimizer.cache_mut().generate_config_key(&config, CacheType::Weights);
+    let cache_key = ModelCache::generate_config_key(&config, CacheType::Weights);
     let weights = vec![0.5; 100];
     optimizer.cache_mut().cache_weights(cache_key, weights);
     
