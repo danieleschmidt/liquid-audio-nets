@@ -8,6 +8,20 @@ use liquid_audio_nets::pretrained::*;
 use liquid_audio_nets::deployment::*;
 use liquid_audio_nets::benchmark::*;
 
+/// Helper function to create LNN with proper permissions for testing
+fn create_test_lnn_with_permissions(config: ModelConfig) -> LNN {
+    let security_context = liquid_audio_nets::SecurityContext {
+        session_id: "test_session".to_string(),
+        permissions: vec!["basic_processing".to_string(), "audio_processing".to_string()],
+        rate_limits: vec![],
+        security_level: liquid_audio_nets::SecurityLevel::Authenticated,
+        last_auth_time: 0,
+        failed_attempts: 0,
+    };
+    
+    LNN::new_with_security(config, security_context).expect("Should create LNN")
+}
+
 #[test]
 fn test_model_cache_basic_operations() {
     let cache_config = CacheConfig::default();
@@ -559,7 +573,7 @@ fn test_integration_lnn_with_optimization() {
         model_type: "integration_test".to_string(),
     };
     
-    let mut lnn = LNN::new(config.clone()).unwrap();
+    let mut lnn = create_test_lnn_with_permissions(config.clone());
     
     // Create performance optimizer
     let cache_config = CacheConfig::default();

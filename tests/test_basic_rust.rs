@@ -36,7 +36,17 @@ fn test_audio_processing() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    // Create security context with proper permissions
+    let security_context = SecurityContext {
+        session_id: "test_session".to_string(),
+        permissions: vec!["basic_processing".to_string(), "audio_processing".to_string()],
+        rate_limits: vec![],
+        security_level: SecurityLevel::Authenticated,
+        last_auth_time: 0,
+        failed_attempts: 0,
+    };
+    
+    let mut lnn = LNN::new_with_security(config, security_context).expect("Should create LNN");
     
     // Test with some dummy audio data
     let audio_buffer = vec![0.1, 0.2, 0.3, 0.4, 0.5];
@@ -59,7 +69,17 @@ fn test_empty_buffer_error() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    // Create security context with proper permissions for testing
+    let security_context = SecurityContext {
+        session_id: "test_session".to_string(),
+        permissions: vec!["basic_processing".to_string(), "audio_processing".to_string()],
+        rate_limits: vec![],
+        security_level: SecurityLevel::Authenticated,
+        last_auth_time: 0,
+        failed_attempts: 0,
+    };
+    
+    let mut lnn = LNN::new_with_security(config, security_context).expect("Should create LNN");
     
     // Test with empty buffer
     let empty_buffer = vec![];

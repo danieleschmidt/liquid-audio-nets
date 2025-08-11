@@ -2,6 +2,20 @@
 
 use liquid_audio_nets::*;
 
+/// Helper function to create LNN with proper permissions for testing
+fn create_test_lnn_with_permissions(config: ModelConfig) -> LNN {
+    let security_context = SecurityContext {
+        session_id: "test_session".to_string(),
+        permissions: vec!["basic_processing".to_string(), "audio_processing".to_string()],
+        rate_limits: vec![],
+        security_level: SecurityLevel::Authenticated,
+        last_auth_time: 0,
+        failed_attempts: 0,
+    };
+    
+    LNN::new_with_security(config, security_context).expect("Should create LNN")
+}
+
 #[test]
 fn test_enhanced_lnn_creation() {
     let config = ModelConfig {
@@ -71,7 +85,7 @@ fn test_input_validation() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Test empty buffer
     let empty_buffer = vec![];
@@ -95,7 +109,7 @@ fn test_nan_input_handling() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Test buffer with NaN
     let nan_buffer = vec![0.1, 0.2, f32::NAN, 0.4, 0.5];
@@ -114,7 +128,7 @@ fn test_infinity_input_handling() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Test buffer with infinity
     let inf_buffer = vec![0.1, 0.2, f32::INFINITY, 0.4, 0.5];
@@ -133,7 +147,7 @@ fn test_adaptive_config_validation() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Test valid adaptive config
     let valid_adaptive = AdaptiveConfig {
@@ -169,7 +183,7 @@ fn test_enhanced_processing() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Set adaptive config
     let adaptive_config = AdaptiveConfig {
@@ -202,7 +216,7 @@ fn test_health_checks() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Process some data first
     let audio_buffer = vec![0.1, 0.2, 0.3, 0.4, 0.5];
@@ -235,7 +249,7 @@ fn test_validation_toggle() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Disable validation
     lnn.set_validation_enabled(false);
@@ -263,7 +277,7 @@ fn test_max_input_magnitude() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Set a low maximum input magnitude
     lnn.set_max_input_magnitude(1.0);
@@ -286,7 +300,7 @@ fn test_state_reset() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // Process some data
     let audio_buffer = vec![0.1, 0.2, 0.3, 0.4, 0.5];
@@ -310,7 +324,7 @@ fn test_error_recovery() {
         model_type: "test".to_string(),
     };
     
-    let mut lnn = LNN::new(config).expect("Should create LNN");
+    let mut lnn = create_test_lnn_with_permissions(config);
     
     // The error recovery is internal to process(), so we test indirectly
     // by trying to process valid data after potentially problematic data

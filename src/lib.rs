@@ -497,12 +497,12 @@ pub struct LNN {
 /// Security context for authentication and authorization
 #[derive(Debug, Clone)]
 pub struct SecurityContext {
-    session_id: String,
-    permissions: Vec<String>,
-    rate_limits: Vec<RateLimit>,
-    security_level: SecurityLevel,
-    last_auth_time: u64,
-    failed_attempts: u32,
+    pub session_id: String,
+    pub permissions: Vec<String>,
+    pub rate_limits: Vec<RateLimit>,
+    pub security_level: SecurityLevel,
+    pub last_auth_time: u64,
+    pub failed_attempts: u32,
 }
 
 /// Security levels

@@ -711,8 +711,16 @@ impl BenchmarkSuite {
         match self.model_registry.load_model(&config.model_type, None) {
             Ok(model) => Ok(model),
             Err(_) => {
-                // Create basic LNN as fallback
-                let lnn = LNN::new(config.clone())?;
+                // Create basic LNN as fallback with proper permissions
+                let security_context = crate::SecurityContext {
+                    session_id: "benchmark_session".to_string(),
+                    permissions: vec!["basic_processing".to_string(), "audio_processing".to_string()],
+                    rate_limits: vec![],
+                    security_level: crate::SecurityLevel::Authenticated,
+                    last_auth_time: 0,
+                    failed_attempts: 0,
+                };
+                let lnn = LNN::new_with_security(config.clone(), security_context)?;
                 Ok(Box::new(lnn))
             }
         }
