@@ -1,0 +1,165 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lnn-research-framework
+  labels:
+    app: lnn-research
+    component: framework
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lnn-research
+      component: framework
+  template:
+    metadata:
+      labels:
+        app: lnn-research
+        component: framework
+    spec:
+      containers:
+      - name: research-framework
+        image: lnn-research:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8888
+          name: jupyter
+        env:
+        - name: PYTHONPATH
+          value: "/app/python"
+        - name: RESEARCH_MODE
+          value: "demo"
+        - name: JUPYTER_ENABLE_LAB
+          value: "yes"
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "8Gi"
+            cpu: "4000m"
+        volumeMounts:
+        - name: research-results
+          mountPath: /app/results
+        - name: research-artifacts
+          mountPath: /app/artifacts
+        - name: research-logs
+          mountPath: /app/logs
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8888
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8888
+          initialDelaySeconds: 15
+          periodSeconds: 5
+      volumes:
+      - name: research-results
+        persistentVolumeClaim:
+          claimName: research-results-pvc
+      - name: research-artifacts
+        persistentVolumeClaim:
+          claimName: research-artifacts-pvc
+      - name: research-logs
+        persistentVolumeClaim:
+          claimName: research-logs-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lnn-research-service
+  labels:
+    app: lnn-research
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8888
+    targetPort: 8888
+    protocol: TCP
+    name: jupyter
+  selector:
+    app: lnn-research
+    component: framework
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: research-results-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: research-artifacts-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: research-logs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: lnn-research-batch
+spec:
+  parallelism: 4
+  completions: 4
+  template:
+    spec:
+      containers:
+      - name: research-batch
+        image: lnn-research:latest
+        env:
+        - name: PYTHONPATH
+          value: "/app/python"
+        - name: RESEARCH_MODE
+          value: "batch"
+        - name: BATCH_MODE
+          value: "true"
+        command: ["./scripts/run_research.sh"]
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        volumeMounts:
+        - name: research-results
+          mountPath: /app/results
+        - name: research-artifacts
+          mountPath: /app/artifacts
+      volumes:
+      - name: research-results
+        persistentVolumeClaim:
+          claimName: research-results-pvc
+      - name: research-artifacts
+        persistentVolumeClaim:
+          claimName: research-artifacts-pvc
+      restartPolicy: OnFailure

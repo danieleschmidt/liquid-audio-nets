@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # Research environment with Jupyter
+  research-jupyter:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.research
+      target: jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ../results:/app/results
+      - ../artifacts:/app/artifacts
+      - ../logs:/app/logs
+      - ../data:/app/data
+    environment:
+      - PYTHONPATH=/app/python
+      - JUPYTER_ENABLE_LAB=yes
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --ServerApp.token='' --ServerApp.password=''
+
+  # Research framework runner
+  research-framework:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.research
+      target: base
+    volumes:
+      - ../results:/app/results
+      - ../artifacts:/app/artifacts
+      - ../logs:/app/logs
+      - ../data:/app/data
+    environment:
+      - PYTHONPATH=/app/python
+      - RESEARCH_MODE=comparative_study
+    command: python examples/research_demo.py
+
+  # Batch experiment runner
+  research-batch:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.research
+      target: production
+    volumes:
+      - ../results:/app/results
+      - ../artifacts:/app/artifacts
+      - ../logs:/app/logs
+      - ../data:/app/data
+      - ../experiments:/app/experiments
+    environment:
+      - PYTHONPATH=/app/python
+      - BATCH_MODE=true
+      - N_PARALLEL_JOBS=4
+    profiles:
+      - batch
+
+  # Resource monitoring
+  research-monitor:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    profiles:
+      - monitoring
+
+volumes:
+  research_data:
+  research_results:
+  research_artifacts:
+
+networks:
+  research_network:
+    driver: bridge

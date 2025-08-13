@@ -1,0 +1,71 @@
+# Research Environment Dockerfile for Liquid Neural Networks
+# Provides complete environment for running research framework
+FROM python:3.11-slim as base
+
+# Set environment variables
+ENV PYTHONPATH=/app/python:$PYTHONPATH
+ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    wget \
+    libsndfile1 \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Copy Python requirements first for better caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install additional research dependencies
+RUN pip install --no-cache-dir \
+    torch>=2.0.0 \
+    torchaudio>=2.0.0 \
+    librosa>=0.10.0 \
+    scikit-learn>=1.3.0 \
+    scipy>=1.11.0 \
+    matplotlib>=3.7.0 \
+    seaborn>=0.12.0 \
+    plotly>=5.15.0 \
+    jupyter>=1.0.0 \
+    notebook>=6.5.0 \
+    ipywidgets>=8.0.0 \
+    tqdm>=4.65.0 \
+    psutil>=5.9.0 \
+    memory-profiler>=0.61.0
+
+# Copy source code
+COPY python/ ./python/
+COPY rust/ ./rust/
+COPY examples/ ./examples/
+COPY tests/ ./tests/
+COPY README.md ./
+
+# Create directories for results and artifacts
+RUN mkdir -p /app/results /app/artifacts /app/logs
+
+# Set proper permissions
+RUN chmod -R 755 /app
+
+# Expose Jupyter port
+EXPOSE 8888
+
+# Default command runs the research demo
+CMD ["python", "examples/research_demo.py"]
+
+# Research container with Jupyter
+FROM base as jupyter
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+
+# Production research container
+FROM base as production
+COPY scripts/run_research.sh ./scripts/
+RUN chmod +x ./scripts/run_research.sh
+CMD ["./scripts/run_research.sh"]
