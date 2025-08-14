@@ -3,8 +3,8 @@
 //! Provides ready-to-use model architectures, weight loading, and
 //! specialized models for common audio processing tasks.
 
-use crate::{Result, LiquidAudioError, ModelConfig, ProcessingResult, AdaptiveConfig};
-use crate::models::{AudioModel, ModelFactory};
+use crate::{Result, LiquidAudioError, ModelConfig, ProcessingResult};
+use crate::models::AudioModel;
 #[cfg(not(feature = "std"))]
 use alloc::{vec::Vec, string::String, collections::BTreeMap};
 

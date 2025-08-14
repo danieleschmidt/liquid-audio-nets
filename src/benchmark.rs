@@ -3,10 +3,10 @@
 //! Provides performance benchmarking, stress testing, and comparative analysis
 //! tools for evaluating LNN models across different scenarios and platforms.
 
-use crate::{Result, LiquidAudioError, ModelConfig, ProcessingResult, LNN};
+use crate::{Result, LiquidAudioError, ModelConfig, LNN};
 use crate::models::AudioModel;
-use crate::optimization::{PerformanceOptimizer, OptimizationStats};
-use crate::pretrained::{ModelRegistry, ModelArchitecture};
+use crate::optimization::PerformanceOptimizer;
+use crate::pretrained::ModelRegistry;
 #[cfg(not(feature = "std"))]
 use alloc::{vec::Vec, string::String, collections::BTreeMap};
 
@@ -16,8 +16,6 @@ use std::{vec::Vec, string::String, collections::BTreeMap};
 #[cfg(not(feature = "std"))]
 use alloc::boxed::Box;
 
-#[cfg(feature = "std")]
-use std::time::{Instant, Duration};
 
 /// Benchmark configuration
 #[derive(Debug, Clone)]

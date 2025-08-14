@@ -9,7 +9,7 @@ use crate::{ModelConfig, ProcessingResult};
 use alloc::{vec::Vec, collections::BTreeMap, string::String, boxed::Box};
 
 #[cfg(feature = "std")]
-use std::{vec::Vec, collections::BTreeMap, string::String, boxed::Box};
+use std::{vec::Vec, collections::BTreeMap};
 use core::hash::Hash;
 
 /// Cache entry with metadata

@@ -401,7 +401,7 @@ impl GlobalDeployment {
     
     /// Estimate global deployment costs
     pub fn estimate_costs(configs: &[RegionalConfig]) -> DeploymentCostEstimate {
-        let mut total_regions = configs.len();
+        let total_regions = configs.len();
         let mut high_performance_regions = 0;
         let mut compliance_complexity = 0;
         

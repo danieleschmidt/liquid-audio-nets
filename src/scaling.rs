@@ -3,9 +3,8 @@
 //! Provides intelligent load distribution, auto-scaling triggers,
 //! and system resource management for production deployments.
 
-use crate::{Result, LiquidAudioError, ModelConfig, ProcessingResult};
-use crate::concurrent::{ThreadPool, ThreadPoolConfig, WorkResult, EmbeddedScheduler};
-use crate::diagnostics::{HealthStatus, HealthReport, DiagnosticsCollector};
+use crate::{Result, LiquidAudioError};
+use crate::diagnostics::HealthStatus;
 #[cfg(not(feature = "std"))]
 use alloc::{vec::Vec, string::String, collections::VecDeque};
 
@@ -13,10 +12,6 @@ use alloc::{vec::Vec, string::String, collections::VecDeque};
 use std::{vec::Vec, string::String, collections::VecDeque};
 use core::sync::atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering};
 
-#[cfg(feature = "std")]
-use std::sync::{Arc, Mutex};
-#[cfg(feature = "std")]
-use std::time::{Duration, Instant};
 
 /// Load balancer for distributing work across multiple processing units
 #[derive(Debug)]

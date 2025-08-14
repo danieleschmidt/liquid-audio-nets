@@ -4,7 +4,6 @@
 //! resource management for high-throughput audio processing.
 
 use crate::{Result, LiquidAudioError, ModelConfig, ProcessingResult};
-use crate::optimization::{PerformanceOptimizer, MemoryPool, PoolConfig};
 #[cfg(not(feature = "std"))]
 use alloc::{vec::Vec, string::String, boxed::Box, collections::VecDeque};
 
@@ -13,7 +12,7 @@ use std::{vec::Vec, string::String, boxed::Box, collections::VecDeque};
 use core::sync::atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering};
 
 #[cfg(feature = "std")]
-use std::sync::{Arc, Mutex, Condvar};
+use std::sync::{Arc, Mutex};
 #[cfg(feature = "std")]
 use std::thread;
 

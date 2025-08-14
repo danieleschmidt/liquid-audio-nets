@@ -3,8 +3,8 @@
 //! Provides advanced optimization techniques including vectorization,
 //! memory pooling, batch processing, and adaptive computation.
 
-use crate::{Result, LiquidAudioError, ModelConfig, ProcessingResult, AdaptiveConfig};
-use crate::cache::{ModelCache, CacheConfig, ModelCacheKey, CacheType};
+use crate::{Result, LiquidAudioError, ProcessingResult};
+use crate::cache::{ModelCache, CacheConfig};
 #[cfg(not(feature = "std"))]
 use alloc::{vec::Vec, string::String, collections::VecDeque};
 

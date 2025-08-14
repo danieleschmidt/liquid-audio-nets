@@ -1,17 +1,64 @@
-//! Liquid state management for neural networks
+//! Enhanced liquid state management for neural networks
+//! 
+//! Extended with neuromorphic computing, quantum-inspired states, and multi-scale dynamics
 
 use nalgebra::DVector;
 use serde::{Deserialize, Serialize};
+use crate::{Result, LiquidAudioError};
 
-/// Liquid neural network state
+#[cfg(not(feature = "std"))]
+use alloc::{vec::Vec, format};
+
+/// Processing modes for different computational paradigms
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub enum StateMode {
+    /// Standard continuous dynamics
+    Standard,
+    /// Neuromorphic spiking dynamics
+    Neuromorphic,
+    /// Quantum-inspired superposition
+    Quantum,
+    /// Multi-scale hierarchical
+    MultiScale,
+    /// Hybrid mode combining multiple paradigms
+    Hybrid,
+}
+
+impl Default for StateMode {
+    fn default() -> Self {
+        StateMode::Standard
+    }
+}
+
+/// Enhanced liquid neural network state with multiple computational modes
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LiquidState {
-    /// Hidden state vector
+    /// Primary hidden state vector
     hidden: DVector<f32>,
+    /// Neuromorphic spike times (for spiking neural networks)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    spike_times: Option<Vec<f32>>,
+    /// Membrane potentials (for neuromorphic mode)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    membrane_potentials: Option<DVector<f32>>,
+    /// Quantum amplitudes (for quantum-inspired mode)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    quantum_amplitudes: Option<DVector<f32>>,
+    /// Multi-scale state hierarchy
+    #[serde(skip_serializing_if = "Option::is_none")]
+    scale_states: Option<Vec<DVector<f32>>>,
     /// Timestamp of last update
     last_update: f64,
     /// State energy (for monitoring)
     energy: f32,
+    /// Entropy measure
+    entropy: f32,
+    /// Sparsity level (fraction of active neurons)
+    sparsity: f32,
+    /// Stability indicator
+    stability: f32,
+    /// Processing mode
+    mode: StateMode,
 }
 
 impl LiquidState {
@@ -19,19 +66,122 @@ impl LiquidState {
     pub fn new(dim: usize) -> Self {
         Self {
             hidden: DVector::zeros(dim),
+            spike_times: None,
+            membrane_potentials: None,
+            quantum_amplitudes: None,
+            scale_states: None,
             last_update: 0.0,
             energy: 0.0,
+            entropy: 0.0,
+            sparsity: 1.0,
+            stability: 1.0,
+            mode: StateMode::Standard,
         }
     }
     
     /// Create state from vector
     pub fn from_vector(hidden: DVector<f32>) -> Self {
         let energy = hidden.norm_squared() / hidden.len() as f32;
+        let entropy = Self::calculate_entropy(&hidden);
+        let sparsity = Self::calculate_sparsity(&hidden);
         
         Self {
             hidden,
+            spike_times: None,
+            membrane_potentials: None,
+            quantum_amplitudes: None,
+            scale_states: None,
             last_update: 0.0,
             energy,
+            entropy,
+            sparsity,
+            stability: 1.0 / (1.0 + energy),
+            mode: StateMode::Standard,
+        }
+    }
+    
+    /// Create neuromorphic state with spike timing
+    pub fn from_neuromorphic(
+        hidden: DVector<f32>,
+        spike_times: Vec<f32>,
+        membrane_potentials: DVector<f32>
+    ) -> Result<Self> {
+        if spike_times.len() != hidden.len() || membrane_potentials.len() != hidden.len() {
+            return Err(LiquidAudioError::ConfigError(
+                "Dimension mismatch in neuromorphic state".to_string()
+            ));
+        }
+        
+        let energy = hidden.norm_squared() / hidden.len() as f32;
+        let entropy = Self::calculate_entropy(&hidden);
+        let sparsity = Self::calculate_sparsity(&hidden);
+        
+        Ok(Self {
+            hidden,
+            spike_times: Some(spike_times),
+            membrane_potentials: Some(membrane_potentials),
+            quantum_amplitudes: None,
+            scale_states: None,
+            last_update: 0.0,
+            energy,
+            entropy,
+            sparsity,
+            stability: 1.0 / (1.0 + energy),
+            mode: StateMode::Neuromorphic,
+        })
+    }
+    
+    /// Create quantum-inspired state with amplitude information
+    pub fn from_quantum(
+        hidden: DVector<f32>,
+        quantum_amplitudes: DVector<f32>
+    ) -> Result<Self> {
+        if quantum_amplitudes.len() != hidden.len() {
+            return Err(LiquidAudioError::ConfigError(
+                "Dimension mismatch in quantum state".to_string()
+            ));
+        }
+        
+        let energy = Self::calculate_quantum_energy(&hidden, &quantum_amplitudes);
+        let entropy = Self::calculate_quantum_entropy(&quantum_amplitudes);
+        let sparsity = Self::calculate_sparsity(&hidden);
+        
+        Ok(Self {
+            hidden,
+            spike_times: None,
+            membrane_potentials: None,
+            quantum_amplitudes: Some(quantum_amplitudes),
+            scale_states: None,
+            last_update: 0.0,
+            energy,
+            entropy,
+            sparsity,
+            stability: 1.0 / (1.0 + energy),
+            mode: StateMode::Quantum,
+        })
+    }
+    
+    /// Create multi-scale hierarchical state
+    pub fn from_multiscale(
+        hidden: DVector<f32>,
+        scale_states: Vec<DVector<f32>>
+    ) -> Self {
+        let energy = hidden.norm_squared() / hidden.len() as f32;
+        let entropy = Self::calculate_entropy(&hidden);
+        let sparsity = Self::calculate_sparsity(&hidden);
+        
+        Self {
+            hidden,
+            spike_times: None,
+            membrane_potentials: None,
+            quantum_amplitudes: None,
+            scale_states: Some(scale_states),
+            last_update: 0.0,
+            energy,
+            entropy,
+            sparsity,
+            stability: 1.0 / (1.0 + energy),
+            mode: StateMode::MultiScale,
         }
     }
     
