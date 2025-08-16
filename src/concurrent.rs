@@ -661,6 +661,234 @@ impl EmbeddedScheduler {
     }
 }
 
+/// Advanced work stealing for high-performance concurrent processing
+#[derive(Debug)]
+pub struct WorkStealingScheduler {
+    /// Worker queues for work stealing
+    worker_queues: Vec<VecDeque<WorkItem>>,
+    /// Number of workers
+    num_workers: usize,
+    /// Steal attempts counter
+    steal_attempts: AtomicU64,
+    /// Successful steals counter
+    successful_steals: AtomicU64,
+    /// Random seed for stealing strategy
+    random_seed: AtomicU64,
+}
+
+impl WorkStealingScheduler {
+    /// Create new work stealing scheduler
+    pub fn new(num_workers: usize) -> Self {
+        let mut worker_queues = Vec::with_capacity(num_workers);
+        for _ in 0..num_workers {
+            worker_queues.push(VecDeque::new());
+        }
+        
+        Self {
+            worker_queues,
+            num_workers,
+            steal_attempts: AtomicU64::new(0),
+            successful_steals: AtomicU64::new(0),
+            random_seed: AtomicU64::new(42),
+        }
+    }
+    
+    /// Submit work to least loaded worker
+    pub fn submit_work(&mut self, item: WorkItem) -> Result<()> {
+        let mut min_queue_size = usize::MAX;
+        let mut target_worker = 0;
+        
+        // Find least loaded worker
+        for (i, queue) in self.worker_queues.iter().enumerate() {
+            if queue.len() < min_queue_size {
+                min_queue_size = queue.len();
+                target_worker = i;
+            }
+        }
+        
+        self.worker_queues[target_worker].push_back(item);
+        Ok(())
+    }
+    
+    /// Try to steal work from another worker
+    pub fn try_steal_work(&mut self, worker_id: usize) -> Option<WorkItem> {
+        if worker_id >= self.num_workers {
+            return None;
+        }
+        
+        self.steal_attempts.fetch_add(1, Ordering::Relaxed);
+        
+        // Try to find a worker with work to steal
+        let seed = self.random_seed.fetch_add(1, Ordering::Relaxed);
+        let start_worker = (seed as usize) % self.num_workers;
+        
+        for i in 0..self.num_workers {
+            let target_worker = (start_worker + i) % self.num_workers;
+            if target_worker != worker_id && !self.worker_queues[target_worker].is_empty() {
+                if let Some(item) = self.worker_queues[target_worker].pop_back() {
+                    self.successful_steals.fetch_add(1, Ordering::Relaxed);
+                    return Some(item);
+                }
+            }
+        }
+        
+        None
+    }
+    
+    /// Get work from worker's own queue
+    pub fn get_local_work(&mut self, worker_id: usize) -> Option<WorkItem> {
+        if worker_id >= self.num_workers {
+            return None;
+        }
+        
+        self.worker_queues[worker_id].pop_front()
+    }
+    
+    /// Get work stealing statistics
+    pub fn get_steal_stats(&self) -> WorkStealingStats {
+        let attempts = self.steal_attempts.load(Ordering::Relaxed);
+        let successes = self.successful_steals.load(Ordering::Relaxed);
+        
+        WorkStealingStats {
+            steal_attempts: attempts,
+            successful_steals: successes,
+            steal_success_rate: if attempts > 0 {
+                successes as f64 / attempts as f64
+            } else {
+                0.0
+            },
+            queue_sizes: self.worker_queues.iter().map(|q| q.len()).collect(),
+        }
+    }
+    
+    /// Get total pending work across all queues
+    pub fn total_pending_work(&self) -> usize {
+        self.worker_queues.iter().map(|q| q.len()).sum()
+    }
+}
+
+/// Work stealing statistics
+#[derive(Debug, Clone)]
+pub struct WorkStealingStats {
+    pub steal_attempts: u64,
+    pub successful_steals: u64,
+    pub steal_success_rate: f64,
+    pub queue_sizes: Vec<usize>,
+}
+
+/// NUMA-aware processing for high-performance systems
+#[derive(Debug)]
+pub struct NumaAwareProcessor {
+    /// NUMA node configurations
+    numa_nodes: Vec<NumaNode>,
+    /// Worker thread assignments
+    worker_assignments: Vec<usize>, // worker_id -> numa_node
+    /// Memory affinity settings
+    memory_affinity: bool,
+    /// Processing statistics per NUMA node
+    numa_stats: Vec<NumaStats>,
+}
+
+/// NUMA node configuration
+#[derive(Debug, Clone)]
+pub struct NumaNode {
+    /// Node ID
+    pub node_id: usize,
+    /// CPU cores on this node
+    pub cpu_cores: Vec<usize>,
+    /// Memory size (bytes)
+    pub memory_size: usize,
+    /// Node latency characteristics
+    pub latency_profile: LatencyProfile,
+}
+
+/// Latency characteristics of NUMA node
+#[derive(Debug, Clone)]
+pub struct LatencyProfile {
+    /// Local memory access latency (nanoseconds)
+    pub local_latency_ns: u32,
+    /// Remote memory access latency (nanoseconds)
+    pub remote_latency_ns: u32,
+    /// Bandwidth (GB/s)
+    pub bandwidth_gbps: f32,
+}
+
+/// NUMA node statistics
+#[derive(Debug, Clone, Default)]
+pub struct NumaStats {
+    /// Total processing time on this node
+    pub total_processing_time_ms: f64,
+    /// Number of tasks processed
+    pub tasks_processed: u64,
+    /// Average task completion time
+    pub avg_completion_time_ms: f64,
+    /// Memory utilization
+    pub memory_utilization: f32,
+    /// CPU utilization per core
+    pub cpu_utilization: Vec<f32>,
+}
+
+impl NumaAwareProcessor {
+    /// Create NUMA-aware processor
+    pub fn new(numa_nodes: Vec<NumaNode>) -> Self {
+        let numa_stats = vec![NumaStats::default(); numa_nodes.len()];
+        
+        Self {
+            numa_nodes,
+            worker_assignments: Vec::new(),
+            memory_affinity: true,
+            numa_stats,
+        }
+    }
+    
+    /// Assign worker to optimal NUMA node
+    pub fn assign_worker(&mut self, worker_id: usize) -> usize {
+        // Simple round-robin assignment for now
+        // In production, this would consider current load
+        let numa_node = worker_id % self.numa_nodes.len();
+        
+        if worker_id >= self.worker_assignments.len() {
+            self.worker_assignments.resize(worker_id + 1, 0);
+        }
+        
+        self.worker_assignments[worker_id] = numa_node;
+        numa_node
+    }
+    
+    /// Get optimal NUMA node for work item
+    pub fn get_optimal_node(&self, _work_item: &WorkItem) -> usize {
+        // Find least loaded NUMA node
+        let mut min_load = f64::MAX;
+        let mut optimal_node = 0;
+        
+        for (i, stats) in self.numa_stats.iter().enumerate() {
+            let current_load = stats.avg_completion_time_ms * stats.tasks_processed as f64;
+            if current_load < min_load {
+                min_load = current_load;
+                optimal_node = i;
+            }
+        }
+        
+        optimal_node
+    }
+    
+    /// Update NUMA statistics
+    pub fn update_stats(&mut self, numa_node: usize, processing_time_ms: f64) {
+        if numa_node < self.numa_stats.len() {
+            let stats = &mut self.numa_stats[numa_node];
+            stats.total_processing_time_ms += processing_time_ms;
+            stats.tasks_processed += 1;
+            stats.avg_completion_time_ms = 
+                stats.total_processing_time_ms / stats.tasks_processed as f64;
+        }
+    }
+    
+    /// Get NUMA statistics
+    pub fn get_numa_stats(&self) -> &[NumaStats] {
+        &self.numa_stats
+    }
+}
+
 /// Resource pool for managing shared resources
 pub struct ResourcePool<T> {
     /// Available resources
@@ -673,6 +901,376 @@ pub struct ResourcePool<T> {
     allocations: AtomicUsize,
     /// Pool statistics
     stats: ResourcePoolStats,
+}
+
+/// Advanced batch processing for high-throughput scenarios
+#[derive(Debug)]
+pub struct BatchProcessor {
+    /// Batch size configuration
+    batch_size: usize,
+    /// Current batch buffer
+    current_batch: Vec<WorkItem>,
+    /// Batch timeout (microseconds)
+    batch_timeout_us: u64,
+    /// Last batch creation time
+    last_batch_time: u64,
+    /// Batch processing statistics
+    batch_stats: BatchStats,
+}
+
+/// Batch processing statistics
+#[derive(Debug, Clone, Default)]
+pub struct BatchStats {
+    /// Total batches processed
+    pub total_batches: u64,
+    /// Total items processed
+    pub total_items: u64,
+    /// Average batch size
+    pub avg_batch_size: f32,
+    /// Average batch processing time
+    pub avg_batch_time_ms: f64,
+    /// Batch efficiency (items/ms)
+    pub batch_efficiency: f64,
+    /// Timeout-triggered batches
+    pub timeout_batches: u64,
+}
+
+impl BatchProcessor {
+    /// Create new batch processor
+    pub fn new(batch_size: usize, batch_timeout_us: u64) -> Self {
+        Self {
+            batch_size,
+            current_batch: Vec::with_capacity(batch_size),
+            batch_timeout_us,
+            last_batch_time: Self::current_timestamp(),
+            batch_stats: BatchStats::default(),
+        }
+    }
+    
+    /// Add item to current batch
+    pub fn add_item(&mut self, item: WorkItem) -> Option<Vec<WorkItem>> {
+        self.current_batch.push(item);
+        
+        // Check if batch is ready
+        if self.current_batch.len() >= self.batch_size {
+            self.finalize_batch(false)
+        } else {
+            None
+        }
+    }
+    
+    /// Check if batch should be flushed due to timeout
+    pub fn check_timeout(&mut self) -> Option<Vec<WorkItem>> {
+        let current_time = Self::current_timestamp();
+        if !self.current_batch.is_empty() && 
+           (current_time - self.last_batch_time) > self.batch_timeout_us {
+            self.finalize_batch(true)
+        } else {
+            None
+        }
+    }
+    
+    /// Force flush current batch
+    pub fn flush(&mut self) -> Option<Vec<WorkItem>> {
+        if !self.current_batch.is_empty() {
+            self.finalize_batch(false)
+        } else {
+            None
+        }
+    }
+    
+    /// Finalize current batch
+    fn finalize_batch(&mut self, timeout_triggered: bool) -> Option<Vec<WorkItem>> {
+        if self.current_batch.is_empty() {
+            return None;
+        }
+        
+        let batch = core::mem::replace(&mut self.current_batch, Vec::with_capacity(self.batch_size));
+        let batch_size = batch.len();
+        
+        // Update statistics
+        self.batch_stats.total_batches += 1;
+        self.batch_stats.total_items += batch_size as u64;
+        self.batch_stats.avg_batch_size = 
+            self.batch_stats.total_items as f32 / self.batch_stats.total_batches as f32;
+        
+        if timeout_triggered {
+            self.batch_stats.timeout_batches += 1;
+        }
+        
+        self.last_batch_time = Self::current_timestamp();
+        
+        Some(batch)
+    }
+    
+    /// Get batch statistics
+    pub fn get_stats(&self) -> &BatchStats {
+        &self.batch_stats
+    }
+    
+    /// Update batch processing time
+    pub fn record_batch_time(&mut self, processing_time_ms: f64) {
+        let alpha = 0.1;
+        self.batch_stats.avg_batch_time_ms = 
+            self.batch_stats.avg_batch_time_ms * (1.0 - alpha) + processing_time_ms * alpha;
+        
+        // Calculate efficiency
+        if self.batch_stats.avg_batch_time_ms > 0.0 {
+            self.batch_stats.batch_efficiency = 
+                self.batch_stats.avg_batch_size as f64 / self.batch_stats.avg_batch_time_ms;
+        }
+    }
+    
+    fn current_timestamp() -> u64 {
+        static mut TIMESTAMP: u64 = 0;
+        unsafe {
+            TIMESTAMP += 1000; // Increment by 1ms
+            TIMESTAMP
+        }
+    }
+}
+
+/// Adaptive load balancer for dynamic workload distribution
+#[derive(Debug)]
+pub struct AdaptiveLoadBalancer {
+    /// Worker load tracking
+    worker_loads: Vec<WorkerLoad>,
+    /// Load balancing algorithm
+    algorithm: LoadBalancingAlgorithm,
+    /// Performance history
+    performance_history: Vec<PerformanceSnapshot>,
+    /// Adaptation parameters
+    adaptation_config: AdaptationConfig,
+}
+
+/// Worker load information
+#[derive(Debug, Clone)]
+pub struct WorkerLoad {
+    /// Worker ID
+    pub worker_id: usize,
+    /// Current queue size
+    pub queue_size: usize,
+    /// Recent processing time (ms)
+    pub recent_processing_time_ms: f64,
+    /// Success rate
+    pub success_rate: f64,
+    /// CPU utilization estimate
+    pub cpu_utilization: f32,
+    /// Load score (higher = more loaded)
+    pub load_score: f64,
+}
+
+/// Load balancing algorithms
+#[derive(Debug, Clone, Copy)]
+pub enum LoadBalancingAlgorithm {
+    /// Round robin distribution
+    RoundRobin,
+    /// Least loaded worker
+    LeastLoaded,
+    /// Weighted round robin
+    WeightedRoundRobin,
+    /// Consistent hashing
+    ConsistentHashing,
+    /// Machine learning based
+    MLBased,
+}
+
+/// Performance snapshot for adaptation
+#[derive(Debug, Clone)]
+pub struct PerformanceSnapshot {
+    /// Timestamp
+    pub timestamp: u64,
+    /// Overall throughput
+    pub throughput: f64,
+    /// Average latency
+    pub avg_latency_ms: f64,
+    /// Load variance across workers
+    pub load_variance: f64,
+    /// Algorithm used
+    pub algorithm: LoadBalancingAlgorithm,
+}
+
+/// Adaptation configuration
+#[derive(Debug, Clone)]
+pub struct AdaptationConfig {
+    /// Enable adaptive algorithm switching
+    pub adaptive_switching: bool,
+    /// Performance evaluation window
+    pub evaluation_window_size: usize,
+    /// Minimum performance improvement threshold
+    pub improvement_threshold: f64,
+    /// Algorithm switching cooldown
+    pub switching_cooldown_ms: u64,
+}
+
+impl AdaptiveLoadBalancer {
+    /// Create new adaptive load balancer
+    pub fn new(num_workers: usize, algorithm: LoadBalancingAlgorithm) -> Self {
+        let worker_loads = (0..num_workers).map(|id| WorkerLoad {
+            worker_id: id,
+            queue_size: 0,
+            recent_processing_time_ms: 0.0,
+            success_rate: 1.0,
+            cpu_utilization: 0.0,
+            load_score: 0.0,
+        }).collect();
+        
+        Self {
+            worker_loads,
+            algorithm,
+            performance_history: Vec::with_capacity(1000),
+            adaptation_config: AdaptationConfig {
+                adaptive_switching: true,
+                evaluation_window_size: 100,
+                improvement_threshold: 0.05,
+                switching_cooldown_ms: 30000,
+            },
+        }
+    }
+    
+    /// Select optimal worker for new work item
+    pub fn select_worker(&mut self, _work_item: &WorkItem) -> usize {
+        match self.algorithm {
+            LoadBalancingAlgorithm::RoundRobin => {
+                static mut COUNTER: usize = 0;
+                unsafe {
+                    let worker = COUNTER % self.worker_loads.len();
+                    COUNTER = COUNTER.wrapping_add(1);
+                    worker
+                }
+            },
+            LoadBalancingAlgorithm::LeastLoaded => {
+                self.worker_loads.iter()
+                    .min_by(|a, b| a.load_score.partial_cmp(&b.load_score).unwrap())
+                    .map(|w| w.worker_id)
+                    .unwrap_or(0)
+            },
+            LoadBalancingAlgorithm::WeightedRoundRobin => {
+                // Select based on inverse load score
+                let total_inverse_load: f64 = self.worker_loads.iter()
+                    .map(|w| 1.0 / (w.load_score + 0.1))
+                    .sum();
+                
+                let mut target = Self::random_f64() * total_inverse_load;
+                for worker in &self.worker_loads {
+                    target -= 1.0 / (worker.load_score + 0.1);
+                    if target <= 0.0 {
+                        return worker.worker_id;
+                    }
+                }
+                0 // Fallback
+            },
+            _ => 0, // Simplified for other algorithms
+        }
+    }
+    
+    /// Update worker load information
+    pub fn update_worker_load(&mut self, worker_id: usize, 
+                              queue_size: usize, 
+                              processing_time_ms: f64,
+                              success: bool) {
+        if worker_id < self.worker_loads.len() {
+            let worker = &mut self.worker_loads[worker_id];
+            worker.queue_size = queue_size;
+            
+            // Update processing time with exponential moving average
+            let alpha = 0.2;
+            worker.recent_processing_time_ms = 
+                worker.recent_processing_time_ms * (1.0 - alpha) + processing_time_ms * alpha;
+            
+            // Update success rate
+            worker.success_rate = worker.success_rate * 0.95 + (if success { 1.0 } else { 0.0 }) * 0.05;
+            
+            // Calculate load score
+            worker.load_score = 
+                worker.queue_size as f64 * 0.4 +
+                worker.recent_processing_time_ms * 0.3 +
+                (1.0 - worker.success_rate) * 100.0 * 0.2 +
+                worker.cpu_utilization as f64 * 0.1;
+        }
+    }
+    
+    /// Record performance snapshot
+    pub fn record_performance(&mut self, throughput: f64, avg_latency_ms: f64) {
+        let load_variance = self.calculate_load_variance();
+        
+        let snapshot = PerformanceSnapshot {
+            timestamp: Self::current_timestamp(),
+            throughput,
+            avg_latency_ms,
+            load_variance,
+            algorithm: self.algorithm,
+        };
+        
+        self.performance_history.push(snapshot);
+        
+        // Keep only recent history
+        if self.performance_history.len() > 1000 {
+            self.performance_history.remove(0);
+        }
+        
+        // Check if we should adapt algorithm
+        if self.adaptation_config.adaptive_switching {
+            self.consider_algorithm_adaptation();
+        }
+    }
+    
+    /// Calculate load variance across workers
+    fn calculate_load_variance(&self) -> f64 {
+        let mean_load = self.worker_loads.iter().map(|w| w.load_score).sum::<f64>() / 
+                       self.worker_loads.len() as f64;
+        
+        let variance = self.worker_loads.iter()
+            .map(|w| (w.load_score - mean_load).powi(2))
+            .sum::<f64>() / self.worker_loads.len() as f64;
+        
+        variance.sqrt()
+    }
+    
+    /// Consider switching to a better algorithm
+    fn consider_algorithm_adaptation(&mut self) {
+        if self.performance_history.len() < self.adaptation_config.evaluation_window_size {
+            return;
+        }
+        
+        // Evaluate current algorithm performance
+        let recent_performance = &self.performance_history
+            [self.performance_history.len() - self.adaptation_config.evaluation_window_size..];
+        
+        let avg_throughput = recent_performance.iter().map(|p| p.throughput).sum::<f64>() / 
+                            recent_performance.len() as f64;
+        let avg_latency = recent_performance.iter().map(|p| p.avg_latency_ms).sum::<f64>() / 
+                         recent_performance.len() as f64;
+        
+        // Simple adaptation logic - switch to least loaded if performance is poor
+        if avg_latency > 50.0 && !matches!(self.algorithm, LoadBalancingAlgorithm::LeastLoaded) {
+            self.algorithm = LoadBalancingAlgorithm::LeastLoaded;
+        } else if avg_throughput > 1000.0 && avg_latency < 20.0 {
+            self.algorithm = LoadBalancingAlgorithm::WeightedRoundRobin;
+        }
+    }
+    
+    /// Get current worker loads
+    pub fn get_worker_loads(&self) -> &[WorkerLoad] {
+        &self.worker_loads
+    }
+    
+    fn current_timestamp() -> u64 {
+        static mut TIMESTAMP: u64 = 0;
+        unsafe {
+            TIMESTAMP += 1000;
+            TIMESTAMP
+        }
+    }
+    
+    /// Simple random number generator for load balancing
+    fn random_f64() -> f64 {
+        static mut SEED: u64 = 1;
+        unsafe {
+            SEED = SEED.wrapping_mul(1103515245).wrapping_add(12345);
+            (SEED as f64) / (u64::MAX as f64)
+        }
+    }
 }
 
 /// Resource pool statistics

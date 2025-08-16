@@ -1155,6 +1155,11 @@ pub mod regions;
 
 pub use diagnostics::{DiagnosticsCollector, HealthReport, HealthStatus, Logger};
 pub use models::{AudioModel, ModelFactory};
+pub use scaling::{
+    LoadBalancer, AutoScaler, ScalingSystem, AdvancedAutoScaler,
+    LoadBalancingStrategy, ScalingConfig, AdvancedScalingConfig,
+    ProcessingNode, ScalingMetrics, ScalingEvent, ScalingAction
+};
 pub use i18n::{Language, MessageKey, I18nManager, set_global_language, t, t_error};
 pub use compliance::{PrivacyFramework, ComplianceConfig, PrivacyManager};
 pub use regions::{Region, RegionalConfig, RegionalManager, PerformanceProfile};
