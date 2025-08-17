@@ -289,7 +289,7 @@ impl ComplexityEstimator {
     }
     
     pub fn cache_stats(&self) -> ComplexityStats {
-        let hit_rate = if self.history.len() > 0 { 0.8 } else { 0.0 };
+        let hit_rate = if !self.history.is_empty() { 0.8 } else { 0.0 };
         ComplexityStats {
             window_size: self.window_size,
             history_length: self.history.len(),
@@ -356,7 +356,7 @@ pub mod audio {
         }
         
         pub fn new(sample_rate: u32, channels: u16, format: SampleFormat, bits_per_sample: u16) -> Result<Self> {
-            if sample_rate < 1000 || sample_rate > 192000 {
+            if !(1000..=192000).contains(&sample_rate) {
                 return Err(super::LiquidAudioError::AudioError(
                     format!("Invalid sample rate: {}", sample_rate)
                 ));
@@ -545,6 +545,7 @@ pub struct ErrorRecoveryState {
     last_error_time: u64,
     recovery_attempts: u32,
     max_recovery_attempts: u32,
+    #[allow(dead_code)]
     backoff_ms: u64,
     fallback_mode: bool,
 }
@@ -592,25 +593,23 @@ impl LNN {
         Self::validate_config(config)?;
         
         // Security-specific validation
-        if security_context.security_level < SecurityLevel::Authenticated {
-            if config.hidden_dim > 128 {
+        if security_context.security_level < SecurityLevel::Authenticated
+            && config.hidden_dim > 128 {
                 return Err(LiquidAudioError::SecurityViolation {
                     action: "large_model_creation".to_string(),
                     context: "unauthenticated_access".to_string(),
                     risk_level: RiskLevel::Medium,
                 });
             }
-        }
         
-        if security_context.security_level < SecurityLevel::Privileged {
-            if config.input_dim * config.hidden_dim > 10000 {
+        if security_context.security_level < SecurityLevel::Privileged
+            && config.input_dim * config.hidden_dim > 10000 {
                 return Err(LiquidAudioError::SecurityViolation {
                     action: "resource_intensive_model".to_string(),
                     context: "insufficient_privileges".to_string(),
                     risk_level: RiskLevel::High,
                 });
             }
-        }
         
         Ok(())
     }
@@ -662,7 +661,7 @@ impl LNN {
             frame_size: 512,
             model_type: "demo".to_string(),
         };
-        Ok(LNN::new(config)?)
+        LNN::new(config)
     }
 
     pub fn process(&mut self, audio_buffer: &[f32]) -> Result<ProcessingResult> {
@@ -680,9 +679,7 @@ impl LNN {
         }
         
         // Check system health before processing
-        if let Err(e) = self.check_system_health() {
-            return Err(e);
-        }
+        self.check_system_health()?;
 
         // Process with enhanced error recovery
         let result = match self.process_internal_secure(audio_buffer) {
@@ -1181,6 +1178,12 @@ impl Default for SecurityContext {
     }
 }
 
+impl Default for RateLimiter {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl RateLimiter {
     pub fn new() -> Self {
         Self {
@@ -1229,6 +1232,12 @@ impl RateLimiter {
     }
 }
 
+impl Default for IntegrityChecker {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl IntegrityChecker {
     pub fn new() -> Self {
         Self {
@@ -1255,6 +1264,12 @@ impl IntegrityChecker {
         }
         
         Ok(())
+    }
+}
+
+impl Default for ErrorRecoveryState {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -1287,6 +1302,12 @@ impl ErrorRecoveryState {
     
     pub fn should_attempt_recovery(&self) -> bool {
         self.recovery_attempts < self.max_recovery_attempts
+    }
+}
+
+impl Default for ProcessingStats {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

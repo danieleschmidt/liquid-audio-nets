@@ -363,6 +363,7 @@ pub struct PretrainedKeywordSpotter {
     /// Model configuration
     config: ModelConfig,
     /// Model weights
+    #[allow(dead_code)]
     weights: Option<Vec<f32>>,
     /// Model metadata
     metadata: ModelMetadata,
@@ -378,6 +379,7 @@ pub struct PretrainedVAD {
     /// Model configuration
     config: ModelConfig,
     /// Model weights
+    #[allow(dead_code)]
     weights: Option<Vec<f32>>,
     /// Model metadata
     metadata: ModelMetadata,
@@ -393,6 +395,7 @@ pub struct PretrainedAudioClassifier {
     /// Model configuration
     config: ModelConfig,
     /// Model weights
+    #[allow(dead_code)]
     weights: Option<Vec<f32>>,
     /// Model metadata
     metadata: ModelMetadata,
@@ -410,6 +413,7 @@ struct ProcessingState {
     /// Processing ready
     ready: bool,
     /// Last processing time
+    #[allow(dead_code)]
     last_processing_time: u64,
 }
 

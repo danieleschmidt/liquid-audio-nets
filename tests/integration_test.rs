@@ -40,8 +40,7 @@ fn test_configuration_system() {
     assert!(adaptive_config.min_timestep_ms < adaptive_config.max_timestep_ms);
     
     // Test invalid configurations
-    let mut invalid_config = ModelConfig::default();
-    invalid_config.input_dim = 0;
+    let invalid_config = ModelConfig { input_dim: 0, ..Default::default() };
     assert!(invalid_config.validate().is_err());
 }
 
@@ -117,7 +116,7 @@ fn test_timestep_controller() {
     
     // Test configuration
     let config = AdaptiveConfig::default();
-    controller.set_config(config.clone());
+    controller.set_config(config);
     
     // Test timestep calculation
     let complexity = 0.5;
@@ -160,7 +159,7 @@ fn test_complexity_estimation() {
         match estimator.estimate_complexity(&signal) {
             Ok(complexity) => {
                 println!("✅ {} complexity: {:.3}", name, complexity);
-                assert!(complexity >= 0.0 && complexity <= 1.0);
+                assert!((0.0..=1.0).contains(&complexity));
             },
             Err(e) => println!("❌ {} complexity estimation failed: {}", name, e),
         }
@@ -331,9 +330,11 @@ fn test_error_handling_and_recovery() {
     }
     
     // Test configuration validation
-    let mut invalid_config = AdaptiveConfig::default();
-    invalid_config.min_timestep_ms = 0.1;
-    invalid_config.max_timestep_ms = 0.05; // Invalid: min > max
+    let invalid_config = AdaptiveConfig {
+        min_timestep_ms: 0.1,
+        max_timestep_ms: 0.05, // Invalid: min > max
+        ..Default::default()
+    };
     
     match invalid_config.validate() {
         Ok(_) => println!("❌ Invalid config validation should have failed"),
@@ -400,7 +401,7 @@ fn test_keyword_detection_scenario() {
     let mut audio = vec![0.0; total_samples];
     
     // Add keyword at 3 seconds
-    let keyword_start = (sample_rate * 3) as usize;
+    let keyword_start = sample_rate * 3;
     let keyword_duration = sample_rate / 2; // 0.5 seconds
     for i in 0..keyword_duration {
         if keyword_start + i < audio.len() {
@@ -420,16 +421,13 @@ fn test_keyword_detection_scenario() {
     
     for chunk in audio.chunks(chunk_size) {
         let mut estimator = ComplexityEstimator::default();
-        match estimator.estimate_complexity(chunk) {
-            Ok(complexity) => {
-                let power = 0.08 + complexity * 1.2; // Power model
-                total_power += power;
-                
-                if complexity > 0.3 { // Detection threshold
-                    detection_count += 1;
-                }
-            },
-            Err(_) => {}, // Handle gracefully
+        if let Ok(complexity) = estimator.estimate_complexity(chunk) {
+            let power = 0.08 + complexity * 1.2; // Power model
+            total_power += power;
+            
+            if complexity > 0.3 { // Detection threshold
+                detection_count += 1;
+            }
         }
     }
     

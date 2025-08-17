@@ -120,6 +120,7 @@ pub struct ThreadPool {
     /// Result queue
     result_queue: Arc<Mutex<VecDeque<WorkResult>>>,
     /// Pool configuration
+    #[allow(dead_code)]
     config: ThreadPoolConfig,
     /// Shutdown signal
     shutdown: Arc<AtomicBool>,
@@ -194,6 +195,7 @@ impl WorkQueue {
         None
     }
 
+    #[allow(dead_code)]
     fn is_empty(&self) -> bool {
         self.current_size == 0
     }
@@ -784,6 +786,7 @@ pub struct NumaAwareProcessor {
     /// Worker thread assignments
     worker_assignments: Vec<usize>, // worker_id -> numa_node
     /// Memory affinity settings
+    #[allow(dead_code)]
     memory_affinity: bool,
     /// Processing statistics per NUMA node
     numa_stats: Vec<NumaStats>,

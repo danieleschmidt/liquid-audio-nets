@@ -3,7 +3,6 @@
 use liquid_audio_nets::*;
 use liquid_audio_nets::cache::*;
 use liquid_audio_nets::optimization::*;
-use liquid_audio_nets::scaling::*;
 use liquid_audio_nets::pretrained::*;
 use liquid_audio_nets::deployment::*;
 use liquid_audio_nets::benchmark::*;
@@ -205,7 +204,7 @@ fn test_adaptive_computation() {
     
     // Should have adapted (though specific direction depends on algorithm)
     let adapted_level = controller.get_computation_level();
-    assert!(adapted_level >= 0.1 && adapted_level <= 1.0);
+    assert!((0.1..=1.0).contains(&adapted_level));
 }
 
 #[test]
@@ -367,7 +366,7 @@ fn test_deployment_manager() {
     
     // Health check
     let health = manager.health_check().unwrap();
-    assert!(health.checks.len() > 0);
+    assert!(!health.checks.is_empty());
 }
 
 #[test]

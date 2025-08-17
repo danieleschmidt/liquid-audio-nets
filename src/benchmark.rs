@@ -594,6 +594,7 @@ pub struct BenchmarkSuite {
     /// Model registry for testing
     model_registry: ModelRegistry,
     /// Performance optimizer
+    #[allow(dead_code)]
     optimizer: Option<PerformanceOptimizer>,
     /// Results storage
     results: Vec<BenchmarkResults>,
@@ -1064,7 +1065,7 @@ impl BenchmarkSuite {
     }
 
     /// Analyze performance trends
-    fn analyze_trends(&self, results: &[&TestResult]) -> PerformanceTrends {
+    fn analyze_trends(&self, _results: &[&TestResult]) -> PerformanceTrends {
         // Simplified trend analysis
         PerformanceTrends {
             latency_trend: TrendDirection::Stable,

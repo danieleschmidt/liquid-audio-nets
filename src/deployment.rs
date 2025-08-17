@@ -398,7 +398,7 @@ pub enum NotificationChannelType {
 }
 
 /// Security configuration
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct SecurityConfig {
     /// TLS configuration
     pub tls: TlsConfig,
@@ -1077,16 +1077,6 @@ impl Default for AlertingConfig {
     }
 }
 
-impl Default for SecurityConfig {
-    fn default() -> Self {
-        Self {
-            tls: TlsConfig::default(),
-            authentication: AuthenticationConfig::default(),
-            authorization: AuthorizationConfig::default(),
-            rate_limiting: RateLimitConfig::default(),
-        }
-    }
-}
 
 impl Default for TlsConfig {
     fn default() -> Self {

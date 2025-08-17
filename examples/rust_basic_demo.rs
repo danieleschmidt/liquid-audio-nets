@@ -22,26 +22,26 @@ fn generate_test_audio(pattern: &str, duration_ms: u32, sample_rate: u32) -> Vec
         "wake" => {
             // Two-tone burst pattern
             let half = samples / 2;
-            for i in 0..half {
+            for (i, sample) in audio.iter_mut().take(half).enumerate() {
                 let t = i as f32 * dt;
-                audio[i] = 0.3 * (2.0 * std::f32::consts::PI * 800.0 * t).sin();
+                *sample = 0.3 * (2.0 * std::f32::consts::PI * 800.0 * t).sin();
             }
-            for i in half..samples {
-                let t = (i - half) as f32 * dt;
-                audio[i] = 0.3 * (2.0 * std::f32::consts::PI * 1200.0 * t).sin();
+            for (i, sample) in audio.iter_mut().skip(half).enumerate() {
+                let t = i as f32 * dt;
+                *sample = 0.3 * (2.0 * std::f32::consts::PI * 1200.0 * t).sin();
             }
         }
         "stop" => {
             // Exponentially decaying tone
-            for i in 0..samples {
+            for (i, sample) in audio.iter_mut().enumerate() {
                 let t = i as f32 * dt;
-                audio[i] = 0.4 * (2.0 * std::f32::consts::PI * 600.0 * t).sin() * (-t * 3.0).exp();
+                *sample = 0.4 * (2.0 * std::f32::consts::PI * 600.0 * t).sin() * (-t * 3.0).exp();
             }
         }
         "noise" => {
             // Simple noise pattern
-            for i in 0..samples {
-                audio[i] = 0.05 * ((i as f32 * 12345.67) % 2.0 - 1.0); // Pseudo-random
+            for (i, sample) in audio.iter_mut().enumerate() {
+                *sample = 0.05 * ((i as f32 * 12345.67) % 2.0 - 1.0); // Pseudo-random
             }
         }
         _ => {
@@ -50,9 +50,9 @@ fn generate_test_audio(pattern: &str, duration_ms: u32, sample_rate: u32) -> Vec
     }
     
     // Add small amount of noise
-    for i in 0..samples {
+    for (i, sample) in audio.iter_mut().enumerate() {
         let noise = 0.02 * (((i as f32 * 987.654) % 2.0) - 1.0);
-        audio[i] += noise;
+        *sample += noise;
     }
     
     audio
@@ -100,7 +100,7 @@ fn demo_basic_processing() -> Result<()> {
     println!("Pattern    Confidence  Power(mW)  Timestep(ms)  Complexity  Energy");
     println!("---------------------------------------------------------------");
     
-    for (pattern, description) in &test_cases {
+    for (pattern, _description) in &test_cases {
         // Generate test audio
         let audio = generate_test_audio(pattern, 500, 16000); // 500ms
         

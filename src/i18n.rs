@@ -4,7 +4,7 @@
 //! and user-facing content for global deployment.
 
 #[cfg(feature = "std")]
-use std::{string::String, collections::BTreeMap, vec::Vec};
+use std::{string::String, collections::BTreeMap, vec::Vec, sync::{OnceLock, Mutex}};
 
 #[cfg(not(feature = "std"))]
 use alloc::{string::String, collections::BTreeMap, vec::Vec};
@@ -354,9 +354,19 @@ impl Default for I18nManager {
 }
 
 /// Global i18n instance
+#[cfg(feature = "std")]
+static GLOBAL_I18N: OnceLock<Mutex<I18nManager>> = OnceLock::new();
+
+#[cfg(not(feature = "std"))]
 static mut GLOBAL_I18N: Option<I18nManager> = None;
 
 /// Get global i18n manager (lazy initialization)
+#[cfg(feature = "std")]
+pub fn get_i18n() -> &'static Mutex<I18nManager> {
+    GLOBAL_I18N.get_or_init(|| Mutex::new(I18nManager::new()))
+}
+
+#[cfg(not(feature = "std"))]
 pub fn get_i18n() -> &'static mut I18nManager {
     unsafe {
         if GLOBAL_I18N.is_none() {
@@ -367,16 +377,42 @@ pub fn get_i18n() -> &'static mut I18nManager {
 }
 
 /// Set global language
+#[cfg(feature = "std")]
+pub fn set_global_language(language: Language) {
+    if let Ok(mut manager) = get_i18n().lock() {
+        manager.set_language(language);
+    }
+}
+
+#[cfg(not(feature = "std"))]
 pub fn set_global_language(language: Language) {
     get_i18n().set_language(language);
 }
 
 /// Get localized message using global i18n manager
+#[cfg(feature = "std")]
+pub fn t(key: MessageKey) -> String {
+    get_i18n()
+        .lock()
+        .map(|manager| manager.get_message(key).to_string())
+        .unwrap_or_else(|_| "Translation error".to_string())
+}
+
+#[cfg(not(feature = "std"))]
 pub fn t(key: MessageKey) -> &'static str {
     get_i18n().get_message(key)
 }
 
 /// Format error message using global i18n manager
+#[cfg(feature = "std")]
+pub fn t_error(key: MessageKey, context: Option<&str>) -> String {
+    get_i18n()
+        .lock()
+        .map(|manager| manager.format_error(key, context))
+        .unwrap_or_else(|_| "Translation error".to_string())
+}
+
+#[cfg(not(feature = "std"))]
 pub fn t_error(key: MessageKey, context: Option<&str>) -> String {
     get_i18n().format_error(key, context)
 }

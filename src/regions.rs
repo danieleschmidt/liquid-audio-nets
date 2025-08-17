@@ -205,6 +205,7 @@ pub enum DataResidency {
 /// Regional deployment manager
 pub struct RegionalManager {
     configs: Vec<RegionalConfig>,
+    #[allow(dead_code)]
     default_region: Region,
 }
 

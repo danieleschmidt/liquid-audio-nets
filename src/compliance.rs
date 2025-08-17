@@ -195,13 +195,12 @@ impl PrivacyManager {
         }
         
         // Check data minimization
-        if self.config.data_minimization {
-            if !self.is_data_necessary(category, purpose) {
+        if self.config.data_minimization
+            && !self.is_data_necessary(category, purpose) {
                 return Err(LiquidAudioError::SecurityError(
                     "Data processing violates data minimization principle".to_string()
                 ));
             }
-        }
         
         // Log audit event
         if self.config.audit_logging {
@@ -244,7 +243,7 @@ impl PrivacyManager {
     fn log_processing_event(&self, category: DataCategory, basis: LawfulBasis, purpose: &str) {
         // In real implementation, this would write to secure audit log
         println!("AUDIT: Processing {} under {:?} for purpose: {}", 
-                category.is_personal_data().then(|| "personal data").unwrap_or("non-personal data"),
+                if category.is_personal_data() { "personal data" } else { "non-personal data" },
                 basis, 
                 purpose);
     }

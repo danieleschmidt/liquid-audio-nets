@@ -378,6 +378,7 @@ struct PerformanceMetric {
     /// Accuracy estimate
     accuracy: f32,
     /// Timestamp
+    #[allow(dead_code)]
     timestamp: u64,
 }
 

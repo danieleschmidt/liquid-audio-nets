@@ -676,6 +676,7 @@ pub struct AdvancedAutoScaler {
     /// Advanced configuration
     advanced_config: AdvancedScalingConfig,
     /// Telemetry integration enabled
+    #[allow(dead_code)]
     telemetry_enabled: bool,
 }
 
@@ -775,12 +776,14 @@ pub struct PredictiveScalingEngine {
     /// Historical data
     historical_data: VecDeque<PredictionDataPoint>,
     /// Prediction models
+    #[allow(dead_code)]
     models: Vec<PredictionModel>,
     /// Current forecast
     current_forecast: Option<LoadForecast>,
     /// Prediction accuracy tracker
     accuracy: AccuracyTracker,
     /// Learning enabled
+    #[allow(dead_code)]
     learning_enabled: bool,
 }
 
@@ -913,14 +916,17 @@ pub struct ExpectedImpact {
 #[derive(Debug)]
 pub struct AccuracyTracker {
     /// Historical accuracy scores
+    #[allow(dead_code)]
     accuracy_history: VecDeque<f32>,
     /// Current accuracy
     current_accuracy: f32,
     /// Model confidence
     confidence: f32,
     /// Total predictions made
+    #[allow(dead_code)]
     total_predictions: u64,
     /// Accurate predictions
+    #[allow(dead_code)]
     accurate_predictions: u64,
 }
 
@@ -928,14 +934,18 @@ pub struct AccuracyTracker {
 #[derive(Debug)]
 pub struct CostOptimizer {
     /// Optimization strategy
+    #[allow(dead_code)]
     strategy: OptimizationStrategy,
     /// Budget constraints
+    #[allow(dead_code)]
     budget: BudgetConstraints,
     /// Cost history
+    #[allow(dead_code)]
     cost_history: VecDeque<CostDataPoint>,
     /// Savings opportunities
     savings_opportunities: Vec<SavingsOpportunity>,
     /// Spending alerts
+    #[allow(dead_code)]
     spending_alerts: Vec<SpendingAlert>,
 }
 
@@ -1390,7 +1400,7 @@ pub struct AdvancedScalingStatistics {
 // Implementation stubs for complex components
 
 impl PredictiveScalingEngine {
-    fn new(horizon: u32) -> Self {
+    fn new(_horizon: u32) -> Self {
         Self {
             historical_data: VecDeque::with_capacity(1000),
             models: vec![

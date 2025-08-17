@@ -226,7 +226,7 @@ fn test_health_checks() {
     let health_report = lnn.health_check().expect("Health check should succeed");
     
     // Check that we got a valid health report
-    assert!(health_report.checks.len() > 0);
+    assert!(!health_report.checks.is_empty());
     assert!(health_report.metrics.total_samples > 0);
     
     // Get performance summary
