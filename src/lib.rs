@@ -1148,6 +1148,13 @@ pub mod pretrained;
 pub mod deployment;
 pub mod benchmark;
 
+// Next-Generation Features (Beyond Generation 3)
+pub mod self_optimization;
+pub mod multimodal;
+pub mod adaptive_learning;
+pub mod hardware_acceleration;
+pub mod quantum_classical;
+
 // Global-first modules for international deployment
 pub mod i18n;
 pub mod compliance;
