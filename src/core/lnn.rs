@@ -2,18 +2,18 @@
 
 use crate::{Result, LiquidAudioError};
 use crate::core::{AdaptiveConfig, ModelConfig, ODESolver, EulerSolver, LiquidState, ProcessingResult};
-use crate::audio::{AudioProcessor, FeatureExtractor};
+use crate::audio::FeatureExtractor;
 use crate::adaptive::TimestepController;
 
 #[cfg(not(feature = "std"))]
-use core::alloc::{vec::Vec, string::String};
+use alloc::{vec::Vec, string::String};
 use core::fmt;
 
 use nalgebra::{DVector, DMatrix};
 use serde::{Deserialize, Serialize};
 
 /// Main Liquid Neural Network struct
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct LNN {
     /// Model configuration
     config: ModelConfig,
@@ -34,7 +34,7 @@ pub struct LNN {
 }
 
 /// Network weights and parameters
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct NetworkWeights {
     /// Input to liquid layer weights [hidden_dim x input_dim]
     w_input: DMatrix<f32>,
@@ -275,6 +275,21 @@ impl LNN {
     /// Reset liquid state to zero
     pub fn reset_state(&mut self) {
         self.liquid_state = LiquidState::new(self.config.hidden_dim);
+    }
+    
+    /// Get adaptive configuration (if set)
+    pub fn adaptive_config(&self) -> Option<&AdaptiveConfig> {
+        self.adaptive_config.as_ref()
+    }
+    
+    /// Clear adaptive configuration
+    pub fn clear_adaptive_config(&mut self) {
+        self.adaptive_config = None;
+    }
+    
+    /// Get model configuration
+    pub fn config(&self) -> &ModelConfig {
+        &self.config
     }
 }
 

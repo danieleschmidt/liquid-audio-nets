@@ -31,21 +31,17 @@ impl Default for StateMode {
 }
 
 /// Enhanced liquid neural network state with multiple computational modes
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct LiquidState {
     /// Primary hidden state vector
     hidden: DVector<f32>,
     /// Neuromorphic spike times (for spiking neural networks)
-    #[serde(skip_serializing_if = "Option::is_none")]
     spike_times: Option<Vec<f32>>,
     /// Membrane potentials (for neuromorphic mode)
-    #[serde(skip_serializing_if = "Option::is_none")]
     membrane_potentials: Option<DVector<f32>>,
     /// Quantum amplitudes (for quantum-inspired mode)
-    #[serde(skip_serializing_if = "Option::is_none")]
     quantum_amplitudes: Option<DVector<f32>>,
     /// Multi-scale state hierarchy
-    #[serde(skip_serializing_if = "Option::is_none")]
     scale_states: Option<Vec<DVector<f32>>>,
     /// Timestamp of last update
     last_update: f64,
@@ -323,6 +319,39 @@ impl LiquidState {
     pub fn sparsity(&self) -> f32 {
         let non_zero = self.hidden.iter().filter(|&&x| x.abs() > 1e-8).count();
         non_zero as f32 / self.hidden.len() as f32
+    }
+    
+    /// Calculate entropy of the state vector
+    fn calculate_entropy(vector: &DVector<f32>) -> f32 {
+        if vector.is_empty() {
+            return 0.0;
+        }
+        
+        // Simple entropy calculation based on probability distribution
+        let sum = vector.iter().map(|&x| x.abs()).sum::<f32>();
+        if sum <= 1e-8 {
+            return 0.0;
+        }
+        
+        let mut entropy = 0.0;
+        for &value in vector.iter() {
+            let prob = value.abs() / sum;
+            if prob > 1e-8 {
+                entropy -= prob * prob.ln();
+            }
+        }
+        
+        entropy
+    }
+    
+    /// Calculate sparsity of the state vector
+    fn calculate_sparsity(vector: &DVector<f32>) -> f32 {
+        if vector.is_empty() {
+            return 0.0;
+        }
+        
+        let non_zero_count = vector.iter().filter(|&&x| x.abs() > 1e-8).count();
+        non_zero_count as f32 / vector.len() as f32
     }
 }
 

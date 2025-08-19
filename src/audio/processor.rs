@@ -1,8 +1,10 @@
 //! High-level audio processing interface with error handling and validation
 
 use crate::{Result, LiquidAudioError};
-use crate::audio::{FeatureExtractor, AudioFormat, PreprocessingFilter, FilterChain};
-use crate::core::{LNN, ProcessingResult, AdaptiveConfig};
+use crate::audio::{FeatureExtractor, AudioFormat};
+use crate::audio::filters::{PreprocessingFilter, FilterChain};
+use crate::core::{ProcessingResult, AdaptiveConfig};
+use crate::LNN;
 
 #[cfg(not(feature = "std"))]
 use core::alloc::{vec::Vec, string::String};
