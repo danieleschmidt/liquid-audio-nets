@@ -359,7 +359,7 @@ mod tests {
             min_timestep: 0.001,
             max_timestep: 0.05,
             energy_threshold: 0.1,
-            complexity_metric: crate::core::ComplexityMetric::Energy,
+            complexity_metric: crate::core::config::ComplexityMetric::Energy,
             adaptation_rate: 1.0,
             smooth_transitions: false,
         };
@@ -383,7 +383,7 @@ mod tests {
             min_timestep: 0.001,
             max_timestep: 0.05,
             energy_threshold: 0.1,
-            complexity_metric: crate::core::ComplexityMetric::Energy,
+            complexity_metric: crate::core::config::ComplexityMetric::Energy,
             adaptation_rate: 1.0,
             smooth_transitions: false,
         };
@@ -404,7 +404,7 @@ mod tests {
             min_timestep: 0.001,
             max_timestep: 0.05,
             energy_threshold: 0.1,
-            complexity_metric: crate::core::ComplexityMetric::Energy,
+            complexity_metric: crate::core::config::ComplexityMetric::Energy,
             adaptation_rate: 0.5,  // 50% adaptation rate
             smooth_transitions: true,
         };

@@ -263,7 +263,7 @@ impl RK4Solver {
 
 /// Adaptive step size solver wrapper
 /// Automatically adjusts step size based on local error estimation
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct AdaptiveStepSolver {
     /// Base solver to use
     inner_solver: Box<dyn ODESolver>,
@@ -478,7 +478,7 @@ impl ODESolver for QuantumInspiredSolver {
 
 /// Multi-scale solver for hierarchical liquid dynamics
 /// Handles multiple timescales simultaneously for complex audio patterns
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct MultiScaleSolver {
     /// Fast timescale solver
     fast_solver: Box<dyn ODESolver>,
@@ -597,7 +597,7 @@ impl SolverFactory {
         match platform.to_lowercase().as_str() {
             "cortex_m4" | "stm32" => {
                 // Optimized for ARM Cortex-M4
-                Self::create_neuromorphic(0.8, 0.001)
+                Ok(Box::new(NeuromorphicSolver::new(0.8, 0.001)))
             },
             "esp32" | "xtensa" => {
                 // Optimized for ESP32
@@ -605,7 +605,7 @@ impl SolverFactory {
             },
             "x86_64" | "pc" => {
                 // High-performance desktop
-                Self::create_adaptive("rk4", 1e-6)
+                Self::create("rk4")
             },
             "gpu" | "cuda" => {
                 // GPU acceleration

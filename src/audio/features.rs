@@ -8,7 +8,6 @@ use rustfft::{FftPlanner, num_complex::Complex};
 use alloc::vec::Vec;
 
 /// Audio feature extractor optimized for liquid neural networks
-#[derive(Debug, Clone)]
 pub struct FeatureExtractor {
     /// Target feature dimension
     feature_dim: usize,
@@ -20,6 +19,17 @@ pub struct FeatureExtractor {
     mel_filters: Option<MelFilterBank>,
     /// Feature normalization parameters
     normalization: NormalizationParams,
+}
+
+impl core::fmt::Debug for FeatureExtractor {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("FeatureExtractor")
+            .field("feature_dim", &self.feature_dim)
+            .field("window", &self.window)
+            .field("mel_filters", &self.mel_filters)
+            .field("normalization", &self.normalization)
+            .finish()
+    }
 }
 
 impl FeatureExtractor {

@@ -20,6 +20,8 @@ pub struct ProcessingResult {
     pub complexity: f32,
     /// Liquid state energy
     pub liquid_energy: f32,
+    /// Optional metadata for the processing result
+    pub metadata: Option<String>,
 }
 
 impl ProcessingResult {
@@ -40,6 +42,7 @@ impl ProcessingResult {
             power_mw,
             complexity,
             liquid_energy,
+            metadata: None,
         }
     }
     
@@ -151,6 +154,7 @@ impl Default for ProcessingResult {
             power_mw: 1.0,
             complexity: 0.5,
             liquid_energy: 0.0,
+            metadata: None,
         }
     }
 }

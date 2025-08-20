@@ -203,6 +203,7 @@ impl LNN {
             power_mw,
             complexity,
             liquid_energy: self.liquid_state.energy(),
+            metadata: None,
         };
         
         Ok(result)
@@ -285,11 +286,6 @@ impl LNN {
     /// Clear adaptive configuration
     pub fn clear_adaptive_config(&mut self) {
         self.adaptive_config = None;
-    }
-    
-    /// Get model configuration
-    pub fn config(&self) -> &ModelConfig {
-        &self.config
     }
 }
 

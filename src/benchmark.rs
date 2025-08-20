@@ -719,7 +719,7 @@ impl BenchmarkSuite {
                     last_auth_time: 0,
                     failed_attempts: 0,
                 };
-                let lnn = LNN::new_with_security(config.clone(), security_context)?;
+                let lnn = LNN::new(config.clone())?;
                 Ok(Box::new(lnn))
             }
         }

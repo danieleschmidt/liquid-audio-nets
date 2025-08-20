@@ -10,7 +10,7 @@ pub mod state;
 pub mod result;
 
 pub use self::lnn::LNN;
-pub use self::config::{AdaptiveConfig, ModelConfig, PowerConfig};
+pub use self::config::{AdaptiveConfig, ModelConfig, PowerConfig, ComplexityMetric};
 pub use self::ode_solver::{ODESolver, EulerSolver, HeunSolver};
 pub use self::state::{LiquidState, NetworkState};
 pub use self::result::ProcessingResult;

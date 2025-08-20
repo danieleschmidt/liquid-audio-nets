@@ -344,6 +344,36 @@ impl LiquidState {
         entropy
     }
     
+    /// Calculate quantum energy of state vector with amplitudes
+    fn calculate_quantum_energy(hidden: &DVector<f32>, quantum_amplitudes: &DVector<f32>) -> f32 {
+        if hidden.len() != quantum_amplitudes.len() {
+            return 0.0;
+        }
+        
+        // Calculate energy as sum of state energy weighted by quantum amplitudes
+        hidden.iter().zip(quantum_amplitudes.iter())
+            .map(|(&h, &q)| h * h * q * q)
+            .sum()
+    }
+    
+    /// Calculate quantum entropy of amplitude vector
+    fn calculate_quantum_entropy(quantum_amplitudes: &DVector<f32>) -> f32 {
+        let sum_squares = quantum_amplitudes.iter().map(|&x| x * x).sum::<f32>();
+        if sum_squares <= 1e-8 {
+            return 0.0;
+        }
+        
+        let mut entropy = 0.0;
+        for &amplitude in quantum_amplitudes.iter() {
+            let prob = (amplitude * amplitude) / sum_squares;
+            if prob > 1e-8 {
+                entropy -= prob * prob.ln();
+            }
+        }
+        
+        entropy
+    }
+    
     /// Calculate sparsity of the state vector
     fn calculate_sparsity(vector: &DVector<f32>) -> f32 {
         if vector.is_empty() {

@@ -104,3 +104,28 @@ impl ModelFactory {
         &["keyword_spotting", "wake_word", "voice_activity", "vad", "speech_enhancement"]
     }
 }
+
+/// AudioModel implementation for LNN
+impl AudioModel for LNN {
+    fn process_audio(&mut self, audio_buffer: &[f32]) -> Result<ProcessingResult> {
+        self.process(audio_buffer)
+    }
+    
+    fn current_power_mw(&self) -> f32 {
+        self.current_power_mw()
+    }
+    
+    fn reset(&mut self) {
+        self.reset_state();
+    }
+    
+    fn model_type(&self) -> &str {
+        "lnn"
+    }
+    
+    fn is_ready(&self) -> bool {
+        // LNN is ready if it has valid configuration
+        let config = self.config();
+        config.hidden_dim > 0 && config.input_dim > 0
+    }
+}
