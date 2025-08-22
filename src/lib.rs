@@ -48,6 +48,10 @@ pub mod adaptive_learning;
 pub mod hardware_acceleration;
 pub mod quantum_classical;
 
+// Novel Research Contributions
+pub mod adaptive_meta_learning;
+pub mod quantum_optimizer;
+
 // Global-first modules for international deployment
 pub mod i18n;
 pub mod compliance;
