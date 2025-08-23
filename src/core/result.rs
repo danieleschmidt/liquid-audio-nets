@@ -233,6 +233,7 @@ pub struct QualityMetrics {
 impl DetailedProcessingResult {
     /// Create from basic result with additional info
     pub fn from_basic(basic: ProcessingResult) -> Self {
+        let confidence = basic.confidence;
         Self {
             basic,
             timing: TimingInfo {
@@ -258,7 +259,7 @@ impl DetailedProcessingResult {
             quality: QualityMetrics {
                 stability_score: 0.95,
                 converged: true,
-                estimated_accuracy: basic.confidence,
+                estimated_accuracy: confidence,
                 snr_db: 20.0,
             },
         }

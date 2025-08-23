@@ -69,10 +69,10 @@ impl AdaptiveController {
             ));
         }
         
-        // Get configuration
+        // Get configuration (clone it to avoid borrow checker issues)
         let config = self.config.as_ref().ok_or_else(|| {
             LiquidAudioError::ConfigError("No adaptive configuration set".to_string())
-        })?;
+        })?.clone();
         
         // Estimate signal complexity
         let complexity = if self.optimization.enable_complexity_caching {
@@ -92,7 +92,7 @@ impl AdaptiveController {
         };
         
         // Calculate optimal timestep
-        let timestep = self.timestep_controller.calculate_timestep(smoothed_complexity, config);
+        let timestep = self.timestep_controller.calculate_timestep(smoothed_complexity, &config);
         
         // Update controller state
         self.state.update(smoothed_complexity, timestep, audio);
@@ -254,10 +254,9 @@ impl AdaptiveController {
     
     /// Set optimization parameters
     pub fn set_optimization_params(&mut self, params: ControllerOptimization) {
-        self.optimization = params;
-        
-        // Apply to sub-components
+        // Apply to sub-components first
         self.complexity_estimator.set_caching_enabled(params.enable_complexity_caching);
+        self.optimization = params;
     }
     
     /// Predict timestep for given complexity without updating state
@@ -690,7 +689,7 @@ mod tests {
     fn test_timestep_prediction() {
         let mut controller = AdaptiveController::new();
         let config = AdaptiveConfig::default();
-        controller.set_config(config).unwrap();
+        controller.set_config(config.clone()).unwrap();
         
         let predicted_timestep = controller.predict_timestep(0.5).unwrap();
         assert!(predicted_timestep > 0.0);

@@ -772,7 +772,7 @@ impl ParameterPredictor {
             .map(|x| x.tanh()); // Tanh activation
         
         let output = (&self.weights.output_weights * &hidden + &self.weights.output_bias)
-            .map(|x| x.sigmoid()); // Sigmoid to normalize output
+            .map(|x| 1.0 / (1.0 + (-x).exp())); // Sigmoid to normalize output
         
         // Convert output vector to parameters
         self.output_to_parameters(&output)
@@ -913,29 +913,35 @@ impl AnomalyDetector {
     pub fn detect_anomalies(&mut self, performance: &ProcessingResult) -> Result<Vec<PerformanceAnomaly>> {
         let mut anomalies = Vec::new();
         
+        // Store anomaly threshold to avoid repeated borrows
+        let threshold = self.anomaly_threshold;
+        
         // Check latency anomaly
-        if let Some(anomaly) = self.check_metric_anomaly(
+        if let Some(anomaly) = Self::check_metric_anomaly_static(
             "latency",
             performance.timestep_ms,
             &mut self.latency_model,
+            threshold,
         )? {
             anomalies.push(anomaly);
         }
         
         // Check power anomaly
-        if let Some(anomaly) = self.check_metric_anomaly(
+        if let Some(anomaly) = Self::check_metric_anomaly_static(
             "power",
             performance.power_mw,
             &mut self.power_model,
+            threshold,
         )? {
             anomalies.push(anomaly);
         }
         
         // Check accuracy anomaly
-        if let Some(anomaly) = self.check_metric_anomaly(
+        if let Some(anomaly) = Self::check_metric_anomaly_static(
             "accuracy",
             performance.confidence,
             &mut self.accuracy_model,
+            threshold,
         )? {
             anomalies.push(anomaly);
         }
@@ -943,11 +949,11 @@ impl AnomalyDetector {
         Ok(anomalies)
     }
     
-    fn check_metric_anomaly(
-        &self,
+    fn check_metric_anomaly_static(
         metric_name: &str,
         value: f32,
         model: &mut StatisticalModel,
+        anomaly_threshold: f32,
     ) -> Result<Option<PerformanceAnomaly>> {
         if model.sample_count < 10 {
             // Not enough data for anomaly detection
@@ -957,7 +963,7 @@ impl AnomalyDetector {
         
         let z_score = (value - model.mean) / model.std_dev;
         
-        if z_score.abs() > self.anomaly_threshold {
+        if z_score.abs() > anomaly_threshold {
             let severity = if z_score.abs() > 4.0 {
                 AnomalySeverity::Critical
             } else if z_score.abs() > 3.0 {

@@ -12,7 +12,7 @@
 
 use crate::{Result, LiquidAudioError};
 use crate::core::{LNN, ModelConfig, AdaptiveConfig, LiquidState};
-use crate::optimization::PerformanceProfiler;
+use crate::optimization::PerformanceOptimizer;
 
 #[cfg(not(feature = "std"))]
 use alloc::{vec::Vec, string::String, collections::BTreeMap};
@@ -113,7 +113,7 @@ pub struct MetaAdaptiveLearningSystem {
     current_step: usize,
     meta_parameters: MetaParameters,
     architectural_proposals: Vec<ArchitecturalProposal>,
-    performance_profiler: PerformanceProfiler,
+    performance_profiler: PerformanceOptimizer,
 }
 
 /// Meta-parameters that control the adaptation process
@@ -137,7 +137,12 @@ impl MetaAdaptiveLearningSystem {
         let adaptation_history = Vec::with_capacity(config.adaptation_memory_size);
         let performance_history = Vec::with_capacity(config.adaptation_memory_size * 2);
         let meta_parameters = MetaParameters::default();
-        let performance_profiler = PerformanceProfiler::new()?;
+        let performance_profiler = PerformanceOptimizer::new(
+            crate::cache::CacheConfig::default(),
+            crate::optimization::PoolConfig::default(),
+            32, // batch_size
+            crate::optimization::AdaptationConfig::default(),
+        );
         
         Ok(Self {
             config,
@@ -567,15 +572,18 @@ impl MetaAdaptiveLearningSystem {
     /// Update meta-parameters after adaptation cycle
     fn update_meta_parameters_post_adaptation(&mut self) -> Result<()> {
         // Learn from adaptation results to improve future decisions
-        let recent_adaptations = self.get_recent_adaptations(10);
+        let recent_adaptations: Vec<AdaptationEntry> = self.get_recent_adaptations(10)
+            .into_iter()
+            .cloned()
+            .collect();
         
-        for adaptation in recent_adaptations {
+        for adaptation in &recent_adaptations {
             if adaptation.success {
                 // Reinforce successful adaptation patterns
-                self.reinforce_successful_pattern(&adaptation);
+                self.reinforce_successful_pattern(adaptation);
             } else {
                 // Learn from failed adaptations
-                self.learn_from_failure(&adaptation);
+                self.learn_from_failure(adaptation);
             }
         }
         

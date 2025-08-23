@@ -150,8 +150,8 @@ impl LNN {
     
     /// Set adaptive timestep configuration
     pub fn set_adaptive_config(&mut self, config: AdaptiveConfig) {
-        self.adaptive_config = Some(config);
         self.timestep_controller.set_config(config.clone());
+        self.adaptive_config = Some(config);
     }
     
     /// Process audio buffer

@@ -58,7 +58,7 @@ pub struct MultiModalConfig {
 }
 
 /// Types of supported modalities
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ModalityType {
     Audio,
     Video,

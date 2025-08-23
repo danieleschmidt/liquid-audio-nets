@@ -32,7 +32,7 @@ pub struct QuantumClassicalProcessor {
 }
 
 /// Configuration for quantum-classical processing
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct QuantumClassicalConfig {
     /// Number of qubits in quantum circuit
     pub num_qubits: usize,
@@ -102,7 +102,7 @@ pub enum QuantumKernel {
 }
 
 /// Classical-quantum interface configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct InterfaceConfig {
     /// Data encoding strategy
     pub encoding_strategy: EncodingStrategy,
@@ -130,7 +130,7 @@ pub enum EncodingStrategy {
 }
 
 /// Measurement strategies
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub enum MeasurementStrategy {
     /// Computational basis measurement
     ComputationalBasis,
@@ -546,7 +546,7 @@ pub struct ConvergenceMetric {
 }
 
 /// Classical optimizer trait
-pub trait ClassicalOptimizerTrait: Send + Sync {
+pub trait ClassicalOptimizerTrait: Send + Sync + std::fmt::Debug {
     /// Optimize objective function
     fn optimize(&mut self, objective: &dyn Fn(&[f64]) -> Result<f64>, 
                 initial_params: &[f64]) -> Result<Vec<f64>>;
@@ -559,7 +559,7 @@ pub trait ClassicalOptimizerTrait: Send + Sync {
 }
 
 /// Quantum optimizer trait
-pub trait QuantumOptimizerTrait: Send + Sync {
+pub trait QuantumOptimizerTrait: Send + Sync + std::fmt::Debug {
     /// Optimize quantum circuit
     fn optimize(&mut self, circuit: &QuantumCircuitSimulator, 
                 objective: &dyn Fn(&[f64]) -> Result<f64>,
@@ -661,7 +661,8 @@ impl QuantumClassicalProcessor {
 
         // Apply quantum algorithms
         let mut quantum_results = Vec::new();
-        for algorithm in &self.config.quantum_algorithms {
+        let algorithms = self.config.quantum_algorithms.clone();
+        for algorithm in &algorithms {
             let result = self.apply_quantum_algorithm(algorithm)?;
             quantum_results.push(result);
         }
@@ -673,10 +674,13 @@ impl QuantumClassicalProcessor {
         let hybrid_result = self.combine_quantum_classical_results(&classical_results, input_data)?;
 
         Ok(ProcessingResult {
-            output: hybrid_result,
-            confidence: self.calculate_confidence(&quantum_results)?,
-            processing_time_ms: self.get_processing_time(),
-            metadata: self.generate_metadata(&quantum_results)?,
+            output: hybrid_result.data.as_vec().clone(),
+            confidence: self.calculate_confidence(&quantum_results)? as f32,
+            timestep_ms: self.get_processing_time() as f32,
+            power_mw: 1.0, // Default power consumption
+            complexity: 0.5, // Default complexity
+            liquid_energy: 0.8, // Default liquid energy
+            metadata: None, // Simplified metadata handling
         })
     }
 

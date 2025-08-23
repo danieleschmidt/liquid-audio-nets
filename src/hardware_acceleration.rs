@@ -47,7 +47,7 @@ pub struct HardwareAccelerationConfig {
 }
 
 /// Types of hardware accelerators
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AcceleratorType {
     CPU,
     GPU,
@@ -3007,7 +3007,7 @@ impl PlanningOptimizer {
                     hard_constraint: true,
                 },
             ],
-            algorithm: OptimizationAlgorithm::Genetic,
+            algorithm: OptimizationAlgorithm::GeneticAlgorithm,
         })
     }
 }
@@ -3015,7 +3015,7 @@ impl PlanningOptimizer {
 impl AccelerationLoadBalancer {
     pub fn new() -> Result<Self> {
         Ok(AccelerationLoadBalancer {
-            strategy: LoadBalancingStrategy::LoadBalanced,
+            strategy: LoadBalancingStrategy::LeastLoaded,
             loads: BTreeMap::new(),
             predictor: LoadPredictor::new()?,
             rebalancing: RebalancingConfig {
