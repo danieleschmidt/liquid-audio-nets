@@ -1,0 +1,32 @@
+## Related Work
+
+### Liquid Neural Networks
+The concept of Liquid Neural Networks was first introduced by Hasani et al. \cite{hasani2021liquid}, 
+who demonstrated that continuous-time neural networks based on ordinary differential equations (ODEs) 
+could achieve superior performance with fewer parameters than traditional discrete-time networks. 
+Their work established the theoretical foundation for adaptive computation graphs that dynamically 
+adjust their temporal dynamics based on input complexity.
+
+### Neural ODEs and Continuous Computation
+Chen et al. \cite{chen2018neural} pioneered Neural Ordinary Differential Equations (NODEs), 
+showing that residual networks could be interpreted as discrete approximations of continuous 
+transformations. This work laid the groundwork for understanding neural networks as continuous 
+dynamical systems, enabling memory-efficient backpropagation through time.
+
+### Neuromorphic Audio Processing
+Previous work in neuromorphic audio processing has focused primarily on spike-based neural 
+networks for keyword spotting and voice activity detection. However, these approaches often 
+require specialized hardware and have limited adaptability to varying signal conditions.
+
+### Edge AI for Audio
+The challenge of deploying neural networks on edge devices for audio processing has been 
+extensively studied. Warden \cite{warden2018speech} established important benchmarks for 
+keyword spotting on resource-constrained devices, while Sainath et al. \cite{sainath2015learning} 
+demonstrated the effectiveness of CNN-LSTM architectures for raw audio processing.
+
+### Our Contributions
+Building upon this foundation, we introduce novel extensions to Liquid Neural Networks 
+specifically optimized for ultra-low-power audio processing. Our key contributions include:
+(1) Attention-driven adaptive timestep control, (2) Hierarchical liquid memory networks, 
+(3) Quantum-classical hybrid dynamics, and (4) comprehensive power-accuracy optimization 
+frameworks for edge deployment.

@@ -1,0 +1,300 @@
+{
+  "timestamp": "2025-08-24T05:09:55.538023",
+  "config": {
+    "benchmark_name": "Production LNN Evaluation",
+    "target_platforms": [
+      "x86_64",
+      "arm64",
+      "cortex-m4",
+      "risc-v"
+    ],
+    "test_categories": [
+      "keyword_spotting",
+      "voice_activity"
+    ],
+    "sample_rates": [
+      16000
+    ],
+    "batch_sizes": [
+      1,
+      8,
+      32
+    ],
+    "precision_levels": [
+      "float32",
+      "int16",
+      "int8"
+    ],
+    "power_budgets": [
+      0.5,
+      1.0,
+      2.0,
+      5.0
+    ],
+    "latency_constraints": [
+      10,
+      25,
+      50,
+      100
+    ],
+    "memory_constraints": [
+      32,
+      64,
+      128,
+      256
+    ],
+    "accuracy_thresholds": [
+      0.8,
+      0.85,
+      0.9,
+      0.95
+    ],
+    "num_trials": 3,
+    "statistical_confidence": 0.95
+  },
+  "platform_info": {
+    "system": "Linux",
+    "release": "6.1.102",
+    "version": "#1 SMP PREEMPT_DYNAMIC Mon Aug  4 17:13:14 UTC 2025",
+    "architecture": [
+      "64bit",
+      ""
+    ],
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "cpu_count": 1,
+    "cpu_count_logical": 2,
+    "memory_total": 4133568512,
+    "memory_available": 3473723392,
+    "python_version": "3.12.3",
+    "timestamp": "2025-08-24T05:09:54.991079",
+    "cpu_freq_current": 2000.176,
+    "cpu_freq_min": 0.0,
+    "cpu_freq_max": 0.0
+  },
+  "performance_metrics": {
+    "LNN_Small": {
+      "keyword_spotting_16000hz": {
+        "processing_time": 0.019636154174804688,
+        "throughput": 50926.469159786306
+      },
+      "voice_activity_16000hz": {
+        "processing_time": 0.01644134521484375,
+        "throughput": 60822.27378190255
+      }
+    },
+    "LNN_Medium": {
+      "keyword_spotting_16000hz": {
+        "processing_time": 0.04005908966064453,
+        "throughput": 24963.12343768599
+      },
+      "voice_activity_16000hz": {
+        "processing_time": 0.04118919372558594,
+        "throughput": 24278.212549201206
+      }
+    },
+    "LNN_Large": {
+      "keyword_spotting_16000hz": {
+        "processing_time": 0.13380050659179688,
+        "throughput": 7473.813257305774
+      },
+      "voice_activity_16000hz": {
+        "processing_time": 0.13228416442871094,
+        "throughput": 7559.483815153918
+      }
+    },
+    "LNN_Adaptive": {
+      "keyword_spotting_16000hz": {
+        "processing_time": 0.04287242889404297,
+        "throughput": 23325.01390279168
+      },
+      "voice_activity_16000hz": {
+        "processing_time": 0.03998756408691406,
+        "throughput": 25007.77486286668
+      }
+    }
+  },
+  "power_analysis": {
+    "LNN_Small": {
+      "keyword_spotting_16000hz": {
+        "average_power": 24.109880577087402,
+        "power_efficiency": 0.034349599113265836
+      },
+      "voice_activity_16000hz": {
+        "average_power": 24.108283172607422,
+        "power_efficiency": 0.034105707345727966
+      }
+    },
+    "LNN_Medium": {
+      "keyword_spotting_16000hz": {
+        "average_power": 96.12015454483033,
+        "power_efficiency": 0.009105191324725932
+      },
+      "voice_activity_16000hz": {
+        "average_power": 96.1207195968628,
+        "power_efficiency": 0.0089805212160012
+      }
+    },
+    "LNN_Large": {
+      "keyword_spotting_16000hz": {
+        "average_power": 384.1671502532959,
+        "power_efficiency": 0.0024992837630616275
+      },
+      "voice_activity_16000hz": {
+        "average_power": 384.1663920822144,
+        "power_efficiency": 0.0025071495389440697
+      }
+    },
+    "LNN_Adaptive": {
+      "keyword_spotting_16000hz": {
+        "average_power": 96.12156121444703,
+        "power_efficiency": 0.008978799331510901
+      },
+      "voice_activity_16000hz": {
+        "average_power": 96.12011878204346,
+        "power_efficiency": 0.009199223821097826
+      }
+    }
+  },
+  "memory_analysis": {
+    "LNN_Small": {
+      "keyword_spotting_16000hz": {
+        "average_memory": 0.0625,
+        "peak_memory": 0.0625
+      },
+      "voice_activity_16000hz": {
+        "average_memory": 0.0625,
+        "peak_memory": 0.0625
+      }
+    },
+    "LNN_Medium": {
+      "keyword_spotting_16000hz": {
+        "average_memory": 0.125,
+        "peak_memory": 0.125
+      },
+      "voice_activity_16000hz": {
+        "average_memory": 0.125,
+        "peak_memory": 0.125
+      }
+    },
+    "LNN_Large": {
+      "keyword_spotting_16000hz": {
+        "average_memory": 0.25,
+        "peak_memory": 0.25
+      },
+      "voice_activity_16000hz": {
+        "average_memory": 0.25,
+        "peak_memory": 0.25
+      }
+    },
+    "LNN_Adaptive": {
+      "keyword_spotting_16000hz": {
+        "average_memory": 0.125,
+        "peak_memory": 0.125
+      },
+      "voice_activity_16000hz": {
+        "average_memory": 0.125,
+        "peak_memory": 0.125
+      }
+    }
+  },
+  "accuracy_analysis": {
+    "LNN_Small": {
+      "keyword_spotting_16000hz": {
+        "average_accuracy": 0.8281647668412658,
+        "accuracy_std": 0.052969124700436465
+      },
+      "voice_activity_16000hz": {
+        "average_accuracy": 0.8222300845985943,
+        "accuracy_std": 0.04990773979275812
+      }
+    },
+    "LNN_Medium": {
+      "keyword_spotting_16000hz": {
+        "average_accuracy": 0.8751924063980964,
+        "accuracy_std": 0.045353460463213785
+      },
+      "voice_activity_16000hz": {
+        "average_accuracy": 0.8632141706174498,
+        "accuracy_std": 0.046674086331765105
+      }
+    },
+    "LNN_Large": {
+      "keyword_spotting_16000hz": {
+        "average_accuracy": 0.9601427234290028,
+        "accuracy_std": 0.034904852249002284
+      },
+      "voice_activity_16000hz": {
+        "average_accuracy": 0.9631625952938799,
+        "accuracy_std": 0.03552498116574646
+      }
+    },
+    "LNN_Adaptive": {
+      "keyword_spotting_16000hz": {
+        "average_accuracy": 0.8630562185548605,
+        "accuracy_std": 0.048166433372428194
+      },
+      "voice_activity_16000hz": {
+        "average_accuracy": 0.8842304955857506,
+        "accuracy_std": 0.052906583009040595
+      }
+    }
+  },
+  "comparative_analysis": {
+    "keyword_spotting_16000hz": {
+      "best_speed_model": "LNN_Small",
+      "speed_improvement_factor": 6.813987372510928,
+      "best_power_model": "LNN_Small",
+      "power_improvement_factor": 15.934012987952563,
+      "best_accuracy_model": "LNN_Large",
+      "accuracy_range": 0.13197795658773692,
+      "overall_winner": "LNN_Large"
+    },
+    "voice_activity_16000hz": {
+      "best_speed_model": "LNN_Small",
+      "speed_improvement_factor": 8.045823665893272,
+      "best_power_model": "LNN_Small",
+      "power_improvement_factor": 15.93503732023175,
+      "best_accuracy_model": "LNN_Large",
+      "accuracy_range": 0.14093251069528567,
+      "overall_winner": "LNN_Large"
+    }
+  },
+  "statistical_validation": {
+    "keyword_spotting_16000hz": {
+      "performance_coefficient_of_variation": 0.7455356077309699,
+      "power_coefficient_of_variation": 0.9210883900823424,
+      "accuracy_coefficient_of_variation": 0.05501178002623587,
+      "benchmark_confidence": 0.6353730234932888
+    },
+    "voice_activity_16000hz": {
+      "performance_coefficient_of_variation": 0.7708236529125854,
+      "power_coefficient_of_variation": 0.9210942069017938,
+      "accuracy_coefficient_of_variation": 0.058042454405738055,
+      "benchmark_confidence": 0.631584224192105
+    }
+  },
+  "deployment_recommendations": {
+    "edge_deployment": {
+      "recommended_model": "LNN_Small",
+      "power_efficiency": 0.034227653229496904,
+      "deployment_notes": "Optimized for ultra-low power consumption"
+    },
+    "cloud_deployment": {
+      "recommended_model": "LNN_Large",
+      "average_accuracy": 0.9616526593614414,
+      "deployment_notes": "Maximizes accuracy for cloud processing"
+    },
+    "mobile_deployment": {},
+    "iot_deployment": {},
+    "general_recommendations": [
+      "Use LNN_Small for ultra-low power edge devices (<1mW budget)",
+      "Use LNN_Medium for balanced performance-power trade-off",
+      "Use LNN_Large for accuracy-critical cloud applications",
+      "Consider LNN_Adaptive for variable workload scenarios",
+      "Implement dynamic model switching based on power availability",
+      "Use quantization for memory-constrained deployments"
+    ]
+  },
+  "reproducibility_hash": "0cee71c918ebf51c"
+}

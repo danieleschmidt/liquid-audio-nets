@@ -1,0 +1,821 @@
+{
+  "ADAT": {
+    "complexity_low": {
+      "avg_processing_time": 0.0002522754669189453,
+      "std_processing_time": 8.014727183346212e-05,
+      "samples_processed": 50,
+      "novel_metrics": [
+        {
+          "attention_entropy": 1.5780585370372688,
+          "adaptive_timestep": 0.021323501385516145,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6022126037369357,
+          "adaptive_timestep": 0.02276377603462606,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5819653578585375,
+          "adaptive_timestep": 0.020805392531189227,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5607059135201653,
+          "adaptive_timestep": 0.02221572409044326,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5585107675832863,
+          "adaptive_timestep": 0.021715234412273778,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.582526585375868,
+          "adaptive_timestep": 0.02054691644200715,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5839334865694683,
+          "adaptive_timestep": 0.0219929067663501,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6040076791323317,
+          "adaptive_timestep": 0.021081994487957518,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.597924495777328,
+          "adaptive_timestep": 0.02135793465742036,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.60001511632111,
+          "adaptive_timestep": 0.02198405853431231,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5744786735934435,
+          "adaptive_timestep": 0.02229220216794047,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5935236406770306,
+          "adaptive_timestep": 0.02164103113327638,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6078641916472307,
+          "adaptive_timestep": 0.020866160870522642,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6003926501224175,
+          "adaptive_timestep": 0.02171632891107382,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6026384660308453,
+          "adaptive_timestep": 0.020208178402495936,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6027818264514813,
+          "adaptive_timestep": 0.02084172483797362,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5965862489728675,
+          "adaptive_timestep": 0.021857992520151498,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6080630672371437,
+          "adaptive_timestep": 0.02016915345076873,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5891095399568207,
+          "adaptive_timestep": 0.020191676364088508,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.607829028568516,
+          "adaptive_timestep": 0.021963384792555225,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6024318719375203,
+          "adaptive_timestep": 0.0215972686653707,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6018674706841778,
+          "adaptive_timestep": 0.021046113628692274,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5881082283980925,
+          "adaptive_timestep": 0.020430000544779652,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6047629580214002,
+          "adaptive_timestep": 0.022910496354942838,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5966954019943316,
+          "adaptive_timestep": 0.02100765888138628,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5995625534471984,
+          "adaptive_timestep": 0.01958246789108514,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5676224798592473,
+          "adaptive_timestep": 0.02158458207528465,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5717859207866902,
+          "adaptive_timestep": 0.02046950412518571,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.604391210751432,
+          "adaptive_timestep": 0.020320388369548897,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.596472894368388,
+          "adaptive_timestep": 0.020668638669524637,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5714255047268177,
+          "adaptive_timestep": 0.020572978531815653,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.601785671170885,
+          "adaptive_timestep": 0.020129756584323217,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5907553943266317,
+          "adaptive_timestep": 0.02105388821935858,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.595776237653582,
+          "adaptive_timestep": 0.020159262342264624,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5619981671342558,
+          "adaptive_timestep": 0.02051909095846767,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5987449609145616,
+          "adaptive_timestep": 0.021480797093080057,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6020150780671116,
+          "adaptive_timestep": 0.02309782171837875,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.595315949935234,
+          "adaptive_timestep": 0.020395227973111205,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5985574689793955,
+          "adaptive_timestep": 0.019921615365137063,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.569567513905572,
+          "adaptive_timestep": 0.02084814903117639,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5760167873506716,
+          "adaptive_timestep": 0.023077539247228104,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5948954658567056,
+          "adaptive_timestep": 0.02224255587391692,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.578967508473124,
+          "adaptive_timestep": 0.02160488303992289,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6051935001702287,
+          "adaptive_timestep": 0.021783285858575543,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.599662021622787,
+          "adaptive_timestep": 0.021612897168249698,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6061353285907956,
+          "adaptive_timestep": 0.020670427286938957,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5738146464465137,
+          "adaptive_timestep": 0.020806183707190083,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6073905854395156,
+          "adaptive_timestep": 0.02167389395801002,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.60138340266673,
+          "adaptive_timestep": 0.021849637395018356,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5647141237991786,
+          "adaptive_timestep": 0.02047416139087459,
+          "memory_utilization": 5
+        }
+      ],
+      "avg_attention_entropy": 1.5912188836729775,
+      "avg_adaptive_timestep": 0.021222528894835637
+    },
+    "complexity_medium": {
+      "avg_processing_time": 0.00026919364929199217,
+      "std_processing_time": 8.943054956323772e-05,
+      "samples_processed": 50,
+      "novel_metrics": [
+        {
+          "attention_entropy": 1.6040351847757275,
+          "adaptive_timestep": 0.02018148317199738,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5991466305396642,
+          "adaptive_timestep": 0.020067363015396536,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5957050237604558,
+          "adaptive_timestep": 0.021877085549832583,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.576654578797483,
+          "adaptive_timestep": 0.02034121048439013,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5992973455566255,
+          "adaptive_timestep": 0.02018395384306823,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.603682060236773,
+          "adaptive_timestep": 0.021958491151419922,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5980654289250904,
+          "adaptive_timestep": 0.020267058579351516,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5992103682620917,
+          "adaptive_timestep": 0.02179839189452223,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6049430061633028,
+          "adaptive_timestep": 0.021314795280433792,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5862212858436977,
+          "adaptive_timestep": 0.02224164747063354,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5938916789760618,
+          "adaptive_timestep": 0.020687629826963237,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.57881530074178,
+          "adaptive_timestep": 0.020726251676398674,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5812710752363417,
+          "adaptive_timestep": 0.022998998356807344,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6042127605074796,
+          "adaptive_timestep": 0.022507472236674722,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6061947874205909,
+          "adaptive_timestep": 0.02090810143214749,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5886985842185923,
+          "adaptive_timestep": 0.019685008192124966,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5963907098156385,
+          "adaptive_timestep": 0.021617960253951785,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.582925908872964,
+          "adaptive_timestep": 0.020307046962743682,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5347511151946747,
+          "adaptive_timestep": 0.019776396595889034,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.556189335283205,
+          "adaptive_timestep": 0.02103096298362736,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6082140193838956,
+          "adaptive_timestep": 0.020944044711835592,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.607011072481394,
+          "adaptive_timestep": 0.02220057989156042,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5841528035128163,
+          "adaptive_timestep": 0.022668284330082496,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6005593164155725,
+          "adaptive_timestep": 0.02023835421006488,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.605586668223674,
+          "adaptive_timestep": 0.021325069235432335,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5852763844182318,
+          "adaptive_timestep": 0.02177364417355347,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5235540579104945,
+          "adaptive_timestep": 0.020809415077351904,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5966005645675558,
+          "adaptive_timestep": 0.02300747561151937,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5827275456779935,
+          "adaptive_timestep": 0.021805532505509415,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6018871768530343,
+          "adaptive_timestep": 0.021503428575892887,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6037119412810796,
+          "adaptive_timestep": 0.019645565828757077,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6062678510993695,
+          "adaptive_timestep": 0.020796090744830374,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.60540691393835,
+          "adaptive_timestep": 0.020803528191923853,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5780174405431016,
+          "adaptive_timestep": 0.02174837543888087,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.588141401389068,
+          "adaptive_timestep": 0.02326402914125842,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.598254888233721,
+          "adaptive_timestep": 0.02248215347954365,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.566653440864473,
+          "adaptive_timestep": 0.021533071132421925,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6085087101330888,
+          "adaptive_timestep": 0.02138556645721787,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5911558424866037,
+          "adaptive_timestep": 0.021381005332849957,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.601805444429654,
+          "adaptive_timestep": 0.021459100932109575,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5755092372479373,
+          "adaptive_timestep": 0.020936831138585375,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5929081851371056,
+          "adaptive_timestep": 0.023115787155867415,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5917421727185292,
+          "adaptive_timestep": 0.02062039240571131,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5444269571124185,
+          "adaptive_timestep": 0.021720069691623038,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.594574586322698,
+          "adaptive_timestep": 0.021739496589753833,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5668641947588944,
+          "adaptive_timestep": 0.021979660436025474,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5920246371538656,
+          "adaptive_timestep": 0.01908861492520638,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5883570245371275,
+          "adaptive_timestep": 0.021619582403919934,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6026914408932171,
+          "adaptive_timestep": 0.02175738340730053,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5684818235592934,
+          "adaptive_timestep": 0.02152637908466671,
+          "memory_utilization": 5
+        }
+      ],
+      "avg_attention_entropy": 1.5890275182482498,
+      "avg_adaptive_timestep": 0.021307116423992613
+    },
+    "complexity_high": {
+      "avg_processing_time": 0.00023709774017333985,
+      "std_processing_time": 6.675126202585814e-05,
+      "samples_processed": 50,
+      "novel_metrics": [
+        {
+          "attention_entropy": 1.5978325167800698,
+          "adaptive_timestep": 0.022239983425032105,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.607597386368295,
+          "adaptive_timestep": 0.02143470466557561,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.605225607727779,
+          "adaptive_timestep": 0.020316790058864335,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5734138923102239,
+          "adaptive_timestep": 0.020960051003104756,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6008408203902609,
+          "adaptive_timestep": 0.021329507642456946,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5772940875218204,
+          "adaptive_timestep": 0.022190733657111803,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5577961138941951,
+          "adaptive_timestep": 0.020524252110291165,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5822639298690364,
+          "adaptive_timestep": 0.02059374344602457,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.587655290944239,
+          "adaptive_timestep": 0.020800416146428365,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6014665409551407,
+          "adaptive_timestep": 0.021357977372142394,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.595949066468875,
+          "adaptive_timestep": 0.02167590272887794,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.588412646199427,
+          "adaptive_timestep": 0.019572700588526754,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5611476107692697,
+          "adaptive_timestep": 0.020811517549639218,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5820994847954677,
+          "adaptive_timestep": 0.02007717215535475,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5857752923506967,
+          "adaptive_timestep": 0.022363071747334012,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.600861916642523,
+          "adaptive_timestep": 0.02056715343155451,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5921238152250285,
+          "adaptive_timestep": 0.02128276626490825,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5970988697966602,
+          "adaptive_timestep": 0.018984061038302264,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5898397104110173,
+          "adaptive_timestep": 0.020971553683736495,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5963185926922707,
+          "adaptive_timestep": 0.021605871052533344,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.601544544423425,
+          "adaptive_timestep": 0.022366427453702698,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.572387864510047,
+          "adaptive_timestep": 0.02099626149628312,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5911577718931524,
+          "adaptive_timestep": 0.02204263734807118,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5735254942204486,
+          "adaptive_timestep": 0.02133500288923406,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5819502041725366,
+          "adaptive_timestep": 0.02091569894493689,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6016615722187661,
+          "adaptive_timestep": 0.02244984434706264,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5664762087701956,
+          "adaptive_timestep": 0.021439932740431586,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.599599096927356,
+          "adaptive_timestep": 0.021697642686847603,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.599314650958405,
+          "adaptive_timestep": 0.020866827340882157,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5864842334584672,
+          "adaptive_timestep": 0.02009103958531541,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5949909888388145,
+          "adaptive_timestep": 0.02114832851957599,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5906887137431838,
+          "adaptive_timestep": 0.021018742596381746,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5971364397742498,
+          "adaptive_timestep": 0.0224699840080713,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5996008176103762,
+          "adaptive_timestep": 0.019898752931923145,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5971414006380036,
+          "adaptive_timestep": 0.01908215461345319,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5902160839466786,
+          "adaptive_timestep": 0.019610273592365175,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6017232710918916,
+          "adaptive_timestep": 0.02142011477457309,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6022202554292373,
+          "adaptive_timestep": 0.020755457511883613,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6042156108197585,
+          "adaptive_timestep": 0.02053007409503823,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.596413745532878,
+          "adaptive_timestep": 0.021451761654766557,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.584195390046535,
+          "adaptive_timestep": 0.02184679004449336,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5970737269047395,
+          "adaptive_timestep": 0.020742719881328392,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5746071119849447,
+          "adaptive_timestep": 0.02052061323199991,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5968763616920711,
+          "adaptive_timestep": 0.021048442364847566,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5962625750394757,
+          "adaptive_timestep": 0.01980312997281542,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6077093581510318,
+          "adaptive_timestep": 0.02244092697302062,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6076803376514897,
+          "adaptive_timestep": 0.021464916007298048,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.6030433105645292,
+          "adaptive_timestep": 0.021400431778166324,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5841180655067573,
+          "adaptive_timestep": 0.021192017619047265,
+          "memory_utilization": 5
+        },
+        {
+          "attention_entropy": 1.5623909369284719,
+          "adaptive_timestep": 0.021397022812230708,
+          "memory_utilization": 5
+        }
+      ],
+      "avg_attention_entropy": 1.5908683867112043,
+      "avg_adaptive_timestep": 0.021062077991676934
+    }
+  },
+  "HLMN": {
+    "complexity_low": {
+      "avg_processing_time": 0.0,
+      "std_processing_time": 0.0,
+      "samples_processed": 0,
+      "novel_metrics": []
+    },
+    "complexity_medium": {
+      "avg_processing_time": 0.0,
+      "std_processing_time": 0.0,
+      "samples_processed": 0,
+      "novel_metrics": []
+    },
+    "complexity_high": {
+      "avg_processing_time": 0.0,
+      "std_processing_time": 0.0,
+      "samples_processed": 0,
+      "novel_metrics": []
+    }
+  },
+  "QCHD": {
+    "complexity_low": {
+      "avg_processing_time": 0.0,
+      "std_processing_time": 0.0,
+      "samples_processed": 0,
+      "novel_metrics": []
+    },
+    "complexity_medium": {
+      "avg_processing_time": 0.0,
+      "std_processing_time": 0.0,
+      "samples_processed": 0,
+      "novel_metrics": []
+    },
+    "complexity_high": {
+      "avg_processing_time": 0.0,
+      "std_processing_time": 0.0,
+      "samples_processed": 0,
+      "novel_metrics": []
+    }
+  }
+}

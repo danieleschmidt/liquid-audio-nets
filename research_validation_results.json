@@ -1,0 +1,50 @@
+{
+  "experiment_name": "Autonomous LNN Research Validation v1.0",
+  "timestamp": "2025-08-24T05:05:17.400733",
+  "performance_metrics": {
+    "pure_tones_power_efficiency": 0.0006981041947642468,
+    "pure_tones_avg_power": 15.574732943480663,
+    "pure_tones_processing_time": 0.04740349451700846,
+    "complex_harmonics_power_efficiency": 0.004942876658252445,
+    "complex_harmonics_avg_power": 65.29149224678828,
+    "complex_harmonics_processing_time": 0.05752284526824951,
+    "noise_bursts_power_efficiency": 0.0064631643104892085,
+    "noise_bursts_avg_power": 98.70970698708074,
+    "noise_bursts_processing_time": 0.05362261772155762,
+    "chirps_power_efficiency": 0.0009144690837831071,
+    "chirps_avg_power": 17.000877613502727,
+    "chirps_processing_time": 0.04723170280456543
+  },
+  "statistical_significance": {
+    "pure_tones_power_efficiency": 0.2307777067168158,
+    "complex_harmonics_power_efficiency": 0.23077042787588825,
+    "noise_bursts_power_efficiency": 0.23077014628869405,
+    "chirps_power_efficiency": 0.23077570131054798
+  },
+  "novel_contributions": [
+    "Multi-scale adaptive complexity analysis for temporal audio signals",
+    "Meta-learning timestep control with online performance feedback",
+    "Quantum-inspired liquid state evolution with adaptive time constants",
+    "Power-accuracy Pareto optimization framework",
+    "Reproducible experimental methodology for LNN research validation"
+  ],
+  "reproducibility_hash": "19b0a43c54c23c48",
+  "validation_status": "PRELIMINARY - Requires Further Investigation",
+  "details": {
+    "total_runtime_seconds": 8.277566194534302,
+    "dataset_categories": [
+      "pure_tones",
+      "complex_harmonics",
+      "noise_bursts",
+      "chirps"
+    ],
+    "total_samples_tested": 303,
+    "baseline_comparisons": [
+      "simple_rnn",
+      "fixed_timestep_lnn",
+      "novel_adaptive_lnn"
+    ],
+    "framework_version": "1.0.0",
+    "research_methodology": "Controlled synthetic dataset with multi-scale analysis"
+  }
+}

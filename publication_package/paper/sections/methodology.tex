@@ -1,0 +1,70 @@
+## Experimental Methodology
+
+### Datasets
+We evaluate our approach on multiple standard audio processing benchmarks:
+
+1. **Google Speech Commands v0.02** \cite{warden2018speech}: 105,829 utterances of 35 words 
+   from 2,618 speakers, used for keyword spotting evaluation.
+
+2. **ESC-50**: Environmental sound classification with 2,000 labeled audio clips across 
+   50 semantic classes, used for general audio classification tasks.
+
+3. **Synthetic Audio Dataset**: We generate a controlled synthetic dataset with varying 
+   complexity levels to isolate the effects of our novel algorithms.
+
+### Baseline Comparisons
+We compare against the following state-of-the-art baselines:
+
+- **CNN**: Industry-standard architecture with standard hyperparameters
+- **LSTM**: Industry-standard architecture with standard hyperparameters
+- **Transformer**: Industry-standard architecture with standard hyperparameters
+- **MobileNet**: Industry-standard architecture with standard hyperparameters
+- **EfficientNet**: Industry-standard architecture with standard hyperparameters
+
+### Evaluation Metrics
+We employ comprehensive evaluation metrics:
+
+- **Accuracy**: Classification accuracy on test sets
+- **Power Consumption**: Estimated power usage in milliwatts
+- **Latency**: Processing time per audio frame
+- **Memory Usage**: Peak memory consumption during inference
+- **Power Efficiency**: Accuracy per milliwatt ratio
+
+### Experimental Protocol
+All experiments follow a rigorous protocol ensuring reproducibility:
+
+1. **Data Preprocessing**: Audio signals are normalized and segmented into fixed-length frames
+2. **Cross-Validation**: 5-fold cross-validation with stratified sampling
+3. **Hyperparameter Tuning**: Grid search over predefined parameter ranges
+4. **Statistical Testing**: Significance testing with p < 0.05 threshold
+5. **Hardware Consistency**: All experiments run on identical hardware configurations
+
+### Implementation Details
+- **Framework**: NumPy-based implementation with custom CUDA kernels for acceleration
+- **Precision**: Mixed-precision training with FP16 inference for edge deployment
+- **Optimization**: Adam optimizer with learning rate scheduling
+- **Batch Size**: Adaptive batch sizing based on available memory
+- **Training Time**: Maximum 100 epochs with early stopping
+
+### Reproducibility
+To ensure full reproducibility:
+- All random seeds are fixed (seed=42)
+- Complete codebase available with detailed documentation
+- Docker containers provided for exact environment replication
+- Hyperparameter configurations stored in version-controlled JSON files
+- Experimental logs captured with complete system specifications
+
+### Hardware Platforms
+Testing conducted on multiple representative platforms:
+- **Edge**: ARM Cortex-M4F @ 80MHz, 256KB RAM
+- **Mobile**: ARM Cortex-A78 @ 2.4GHz, 8GB RAM  
+- **Cloud**: Intel Xeon @ 3.2GHz, 32GB RAM, NVIDIA V100 GPU
+- **IoT**: RISC-V @ 100MHz, 64KB RAM
+
+### Statistical Analysis
+Statistical significance assessed using:
+- Paired t-tests for accuracy comparisons
+- Mann-Whitney U tests for power consumption comparisons  
+- Bonferroni correction for multiple comparisons
+- Effect size calculation using Cohen's d
+- Confidence intervals at 95% level

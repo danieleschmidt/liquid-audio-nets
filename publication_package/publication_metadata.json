@@ -1,0 +1,18 @@
+{
+  "title": "Novel Liquid Neural Networks for Ultra-Low-Power Audio Processing: A Comprehensive Study",
+  "authors": [
+    "Daniel Schmidt",
+    "Terragon Research Team"
+  ],
+  "target_venue": "ICASSP 2026",
+  "keywords": [
+    "Liquid Neural Networks",
+    "Edge AI",
+    "Power Efficiency",
+    "Audio Processing",
+    "Adaptive Timesteps",
+    "Neuromorphic Computing"
+  ],
+  "preparation_timestamp": "2025-08-24T05:12:57.016316",
+  "reproducibility_hash": "a1385858d548fc97"
+}

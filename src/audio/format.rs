@@ -468,7 +468,7 @@ mod tests {
         let embedded_format = AudioFormat::pcm_16khz_mono().unwrap();
         assert!(embedded_format.is_embedded_suitable());
         
-        let high_res_format = AudioFormat::new(192000, 8, SampleFormat::Float, 64).unwrap();
+        let high_res_format = AudioFormat::new(192000, 8, SampleFormat::Float, 32).unwrap();
         assert!(!high_res_format.is_embedded_suitable());
     }
 }

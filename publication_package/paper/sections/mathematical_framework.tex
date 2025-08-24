@@ -1,0 +1,54 @@
+## Mathematical Framework
+
+### Liquid Neural Network Dynamics
+Let $\\mathbf{x}(t) \in \mathbb{R}^n$ represent the liquid state vector 
+at time $t$. The continuous-time dynamics are governed by the following system of ODEs:
+
+$$\\frac{d\\mathbf{x}}{dt} = f(\\mathbf{x}, \\mathbf{u}, t)$$
+
+where $f(\cdot)$ represents the liquid dynamics function, $\mathbf{u}(t)$ is the input signal, 
+and the specific form of $f$ determines the network's computational properties.
+
+### Attention-Driven Adaptive Timestep Control (ADAT)
+For our novel ADAT algorithm, we introduce a multi-head attention mechanism that computes 
+optimal timesteps based on input complexity. The attention weights are computed as:
+
+$$\alpha_{ij} = \frac{\exp(\text{score}(\mathbf{q}_i, \mathbf{k}_j))}{\sum_{k=1}^T \exp(\text{score}(\mathbf{q}_i, \mathbf{k}_k))}$$
+
+The adaptive timestep $\\Delta t$ is then determined by:
+
+$$\Delta t = \Delta t_{base} \cdot \sigma\left(\mathbf{W}_t^T \sum_{j=1}^T \alpha_{ij} \mathbf{v}_j\right)$$
+
+where $\sigma$ is the sigmoid function and $\mathbf{W}_t$ are learned timestep prediction weights.
+
+### Hierarchical Liquid Memory Networks (HLMN)
+For HLMN, we define a hierarchy of liquid states $\{\mathbf{x}^{(l)}(t)\}_{l=1}^L$ across $L$ levels, 
+where level $l$ operates at timescale $\tau_l = \tau_0 \cdot 2^l$. The cross-hierarchical dynamics are:
+
+$$\frac{d\mathbf{x}^{(l)}}{dt} = -\frac{\mathbf{x}^{(l)}}{\tau_l} + \mathbf{W}_{\text{up}}^{(l)} \mathbf{x}^{(l-1)} + \mathbf{W}_{\text{down}}^{(l)} \mathbf{x}^{(l+1)} + \mathbf{W}_{\text{lat}}^{(l)} \mathbf{x}^{(l)}$$
+
+### Quantum-Classical Hybrid Dynamics (QCHD)
+The quantum state evolution follows the Schrödinger equation:
+
+$$i\hbar \frac{\partial |\psi\rangle}{\partial t} = \hat{H} |\psi\rangle$$
+
+while the classical-quantum coupling is implemented through:
+
+$$\mathbf{x}_{classical}(t+\Delta t) = \mathbf{x}_{classical}(t) + \gamma \langle \psi(t) | \hat{O} | \psi(t) \rangle$$
+
+where $\hat{O}$ is a measurement operator and $\gamma$ controls the coupling strength.
+
+### Power Consumption Model
+The total power consumption is modeled as:
+
+$$P_{total} = P_{base} + P_{compute}(\Delta t, n) + P_{memory}(n) + P_{I/O}(f_s)$$
+
+where $P_{compute}$ depends on timestep and network size, $P_{memory}$ on the number of parameters, 
+and $P_{I/O}$ on the sampling frequency $f_s$.
+
+### Optimization Objective
+We formulate a multi-objective optimization problem:
+
+$$\min_{\theta} \left\{ -\mathcal{A}(\theta), P_{total}(\theta), L_{latency}(\theta) \right\}$$
+
+subject to accuracy constraint $\mathcal{A}(\theta) \geq \mathcal{A}_{min}$ and power budget $P_{total}(\theta) \leq P_{max}$.
