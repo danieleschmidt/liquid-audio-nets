@@ -17,8 +17,6 @@ extern crate alloc;
 #[cfg(not(feature = "std"))]
 use alloc::{vec::Vec, string::String, vec, collections::BTreeMap};
 
-#[cfg(feature = "std")]
-use std::collections::BTreeMap;
 
 #[cfg(not(feature = "std"))]
 use alloc::string::ToString;

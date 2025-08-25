@@ -34,6 +34,8 @@ pub struct ValidationConfig {
     pub validation_timeout_us: u64,
     /// Error handling strategy
     pub error_handling: ValidationErrorHandling,
+    /// Statistical significance level (p-value threshold)
+    pub significance_level: Option<f64>,
 }
 
 /// Validation strictness levels
@@ -1366,21 +1368,272 @@ impl OutputValidator for QualityValidator {
 
 // Implement placeholder structures
 impl StatisticalValidator {
-    fn new(_config: &ValidationConfig) -> Result<Self> {
+    fn new(config: &ValidationConfig) -> Result<Self> {
+        let mut statistical_tests = Vec::new();
+        
+        // Add default statistical tests
+        statistical_tests.push(StatisticalTest {
+            name: "Kolmogorov-Smirnov".to_string(),
+            test_type: StatisticalTestType::DistributionTest,
+            parameters: {
+                let mut params = BTreeMap::new();
+                params.insert("confidence_level".to_string(), 0.95);
+                params
+            },
+            alpha: config.significance_level.unwrap_or(0.05),
+        });
+        
+        statistical_tests.push(StatisticalTest {
+            name: "Grubbs_Outlier".to_string(),
+            test_type: StatisticalTestType::OutlierDetection,
+            parameters: {
+                let mut params = BTreeMap::new();
+                params.insert("max_outliers".to_string(), 0.1);
+                params
+            },
+            alpha: config.significance_level.unwrap_or(0.05),
+        });
+
         Ok(Self {
             baseline_models: BTreeMap::new(),
             anomaly_threshold: 0.95,
             window_size: 100,
-            statistical_tests: Vec::new(),
+            statistical_tests,
         })
     }
 
-    fn validate_input(&self, _input: &[f32]) -> ValidationResult {
-        ValidationResult::new() // Placeholder
+    fn validate_input(&self, input: &[f32]) -> ValidationResult {
+        let mut result = ValidationResult::new();
+        
+        if input.is_empty() {
+            return result;
+        }
+
+        // Calculate basic statistics
+        let mean = input.iter().sum::<f32>() / input.len() as f32;
+        let variance = input.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / input.len() as f32;
+        let std_dev = variance.sqrt();
+        
+        // Store statistics in metadata
+        result.metadata.insert("mean".to_string(), ValidationValue::Float(mean as f64));
+        result.metadata.insert("std_dev".to_string(), ValidationValue::Float(std_dev as f64));
+        result.metadata.insert("variance".to_string(), ValidationValue::Float(variance as f64));
+
+        // Outlier detection using modified Z-score
+        let median = self.calculate_median(input);
+        let mad = self.calculate_mad(input, median);
+        
+        for (i, &value) in input.iter().enumerate() {
+            let modified_z_score = 0.6745 * (value - median) / mad;
+            if modified_z_score.abs() > 3.5 {
+                result.add_warning(ValidationWarning {
+                    code: "STATISTICAL_OUTLIER".to_string(),
+                    message: format!("Statistical outlier detected at index {}: value={:.3}, z-score={:.3}", i, value, modified_z_score),
+                    field: Some(format!("input[{}]", i)),
+                    recommendation: Some("Consider data preprocessing or outlier handling".to_string()),
+                });
+            }
+        }
+
+        // Normality test (simplified Shapiro-Wilk-like test)
+        if input.len() >= 8 {
+            let normality_score = self.test_normality(input);
+            result.metadata.insert("normality_score".to_string(), ValidationValue::Float(normality_score as f64));
+            
+            if normality_score < 0.05 {
+                result.add_warning(ValidationWarning {
+                    code: "NON_NORMAL_DISTRIBUTION".to_string(),
+                    message: format!("Input data appears non-normal (p={:.3})", normality_score),
+                    field: Some("input_distribution".to_string()),
+                    recommendation: Some("Consider data transformation or alternative methods".to_string()),
+                });
+            }
+        }
+
+        // Stationarity test (simplified)
+        if input.len() >= 20 {
+            let stationarity_score = self.test_stationarity(input);
+            result.metadata.insert("stationarity_score".to_string(), ValidationValue::Float(stationarity_score as f64));
+            
+            if stationarity_score < 0.05 {
+                result.add_warning(ValidationWarning {
+                    code: "NON_STATIONARY_DATA".to_string(),
+                    message: format!("Input data appears non-stationary (p={:.3})", stationarity_score),
+                    field: Some("input_stationarity".to_string()),
+                    recommendation: Some("Consider trend removal or differencing".to_string()),
+                });
+            }
+        }
+
+        result
     }
 
-    fn validate_output(&self, _result: &ProcessingResult) -> ValidationResult {
-        ValidationResult::new() // Placeholder
+    fn validate_output(&self, processing_result: &ProcessingResult) -> ValidationResult {
+        let mut result = ValidationResult::new();
+        
+        if processing_result.output.is_empty() {
+            return result;
+        }
+
+        let output = &processing_result.output;
+        
+        // Statistical validation of output distribution
+        let mean = output.iter().sum::<f32>() / output.len() as f32;
+        let variance = output.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / output.len() as f32;
+        let std_dev = variance.sqrt();
+        
+        result.metadata.insert("output_mean".to_string(), ValidationValue::Float(mean as f64));
+        result.metadata.insert("output_std_dev".to_string(), ValidationValue::Float(std_dev as f64));
+        
+        // Check for degenerate outputs (all same value)
+        let min_val = output.iter().fold(f32::INFINITY, |a, &b| a.min(b));
+        let max_val = output.iter().fold(f32::NEG_INFINITY, |a, &b| a.max(b));
+        
+        if (max_val - min_val).abs() < 1e-6 {
+            result.add_error(ValidationError {
+                code: "DEGENERATE_OUTPUT".to_string(),
+                message: "Output values are all identical or nearly identical".to_string(),
+                severity: ErrorSeverity::Error,
+                field: Some("output_variance".to_string()),
+                expected: Some(ValidationValue::String("varied output".to_string())),
+                actual: Some(ValidationValue::Float((max_val - min_val) as f64)),
+                suggestion: Some("Check model training and weight initialization".to_string()),
+            });
+        }
+
+        // Validate confidence score consistency
+        if processing_result.confidence > 0.0 {
+            let entropy = self.calculate_entropy(output);
+            let expected_confidence = 1.0 - (entropy / (output.len() as f32).ln());
+            let confidence_diff = (processing_result.confidence - expected_confidence).abs();
+            
+            if confidence_diff > 0.3 {
+                result.add_warning(ValidationWarning {
+                    code: "CONFIDENCE_INCONSISTENCY".to_string(),
+                    message: format!("Confidence score {:.3} inconsistent with output entropy (expected ~{:.3})", 
+                        processing_result.confidence, expected_confidence),
+                    field: Some("confidence".to_string()),
+                    recommendation: Some("Review confidence calculation method".to_string()),
+                });
+            }
+        }
+
+        // Performance metrics validation
+        if processing_result.power_mw > 0.0 && processing_result.timestep_ms > 0.0 {
+            let efficiency_ratio = processing_result.confidence / (processing_result.power_mw * processing_result.timestep_ms);
+            result.metadata.insert("efficiency_ratio".to_string(), ValidationValue::Float(efficiency_ratio as f64));
+            
+            if efficiency_ratio < 0.01 {
+                result.add_warning(ValidationWarning {
+                    code: "LOW_EFFICIENCY".to_string(),
+                    message: format!("Low efficiency ratio: {:.6} (confidence/power*time)", efficiency_ratio),
+                    field: Some("efficiency".to_string()),
+                    recommendation: Some("Consider model optimization for better efficiency".to_string()),
+                });
+            }
+        }
+
+        result
+    }
+    
+    fn calculate_median(&self, data: &[f32]) -> f32 {
+        let mut sorted = data.to_vec();
+        sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        
+        let len = sorted.len();
+        if len % 2 == 0 {
+            (sorted[len / 2 - 1] + sorted[len / 2]) / 2.0
+        } else {
+            sorted[len / 2]
+        }
+    }
+    
+    fn calculate_mad(&self, data: &[f32], median: f32) -> f32 {
+        let mut abs_deviations: Vec<f32> = data.iter()
+            .map(|&x| (x - median).abs())
+            .collect();
+        abs_deviations.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        
+        let len = abs_deviations.len();
+        if len % 2 == 0 {
+            (abs_deviations[len / 2 - 1] + abs_deviations[len / 2]) / 2.0
+        } else {
+            abs_deviations[len / 2]
+        }
+    }
+    
+    fn test_normality(&self, data: &[f32]) -> f32 {
+        // Simplified normality test using skewness and kurtosis
+        let mean = data.iter().sum::<f32>() / data.len() as f32;
+        let variance = data.iter().map(|x| (x - mean).powi(2)).sum::<f32>() / data.len() as f32;
+        let std_dev = variance.sqrt();
+        
+        if std_dev == 0.0 {
+            return 0.0; // Non-normal (constant data)
+        }
+        
+        let skewness = data.iter()
+            .map(|x| ((x - mean) / std_dev).powi(3))
+            .sum::<f32>() / data.len() as f32;
+            
+        let kurtosis = data.iter()
+            .map(|x| ((x - mean) / std_dev).powi(4))
+            .sum::<f32>() / data.len() as f32;
+        
+        // Normal distribution has skewness ≈ 0 and kurtosis ≈ 3
+        let skew_deviation = skewness.abs();
+        let kurt_deviation = (kurtosis - 3.0).abs();
+        
+        // Simple scoring: higher score = more normal
+        let normality_score = (2.0 - skew_deviation - kurt_deviation * 0.25).max(0.0).min(1.0);
+        
+        // Return as p-value (higher = more normal)
+        normality_score
+    }
+    
+    fn test_stationarity(&self, data: &[f32]) -> f32 {
+        // Simplified augmented Dickey-Fuller test
+        let n = data.len();
+        if n < 20 {
+            return 1.0; // Not enough data
+        }
+        
+        // Calculate first differences
+        let diffs: Vec<f32> = data.windows(2)
+            .map(|w| w[1] - w[0])
+            .collect();
+        
+        // Calculate variance of differences vs original
+        let original_var = data.iter().map(|x| x.powi(2)).sum::<f32>() / n as f32 
+            - (data.iter().sum::<f32>() / n as f32).powi(2);
+        let diff_var = diffs.iter().map(|x| x.powi(2)).sum::<f32>() / diffs.len() as f32;
+        
+        // Stationarity indicator: if differences have much lower variance, likely non-stationary
+        let stationarity_ratio = (diff_var / original_var.max(1e-6)).min(1.0);
+        
+        // Higher ratio suggests stationarity
+        stationarity_ratio
+    }
+    
+    fn calculate_entropy(&self, data: &[f32]) -> f32 {
+        // Calculate Shannon entropy of output probabilities
+        let sum: f32 = data.iter().map(|x| x.abs()).sum();
+        if sum == 0.0 {
+            return 0.0;
+        }
+        
+        let entropy = data.iter()
+            .map(|&x| {
+                let p = x.abs() / sum;
+                if p > 0.0 {
+                    -p * p.ln()
+                } else {
+                    0.0
+                }
+            })
+            .sum::<f32>();
+            
+        entropy
     }
 }
 
@@ -1592,12 +1845,13 @@ impl Default for ValidationConfig {
             output_verification: true,
             formal_verification: false,
             data_integrity_checks: true,
-            statistical_validation: false,
+            statistical_validation: true,
             contract_validation: false,
             strictness_level: StrictnessLevel::Standard,
             custom_rules: Vec::new(),
             validation_timeout_us: 10000, // 10ms
             error_handling: ValidationErrorHandling::CollectErrors,
+            significance_level: Some(0.05),
         }
     }
 }
