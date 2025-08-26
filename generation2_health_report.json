@@ -1,0 +1,156 @@
+{
+  "timestamp": 1756216111.6167383,
+  "test_results": [
+    {
+      "test": "Valid audio",
+      "status": "ok",
+      "errors": 0,
+      "warnings": 1
+    },
+    {
+      "test": "Empty buffer",
+      "status": "validation_error",
+      "errors": 1,
+      "warnings": 1
+    },
+    {
+      "test": "Invalid types",
+      "status": "validation_error",
+      "errors": 1,
+      "warnings": 1
+    },
+    {
+      "test": "Extreme values",
+      "status": "ok",
+      "errors": 0,
+      "warnings": 2
+    },
+    {
+      "test": "Large buffer",
+      "status": "ok",
+      "errors": 0,
+      "warnings": 0
+    },
+    {
+      "test": "NaN values",
+      "status": "ok",
+      "errors": 0,
+      "warnings": 1
+    },
+    {
+      "test": "Inf values",
+      "status": "ok",
+      "errors": 0,
+      "warnings": 1
+    }
+  ],
+  "health_status": {
+    "total_processed": 4,
+    "total_errors": 0,
+    "total_warnings": 4,
+    "avg_processing_time": 11.317253112792969,
+    "avg_power_consumption": 1.150025025025025,
+    "uptime_seconds": 0.04840493202209473,
+    "start_time": 1756216111.5677676,
+    "last_error": {
+      "time": 1756216111.570914,
+      "type": "ValidationError",
+      "message": "Audio buffer validation failed: Invalid sample type at index 0: <class 'str'>",
+      "traceback": "Traceback (most recent call last):\n  File \"/root/repo/generation2_robust_system.py\", line 216, in validate_audio_buffer\n    raise ValidationError(f\"Invalid sample type at index {i}: {type(sample)}\")\nValidationError: Invalid sample type at index 0: <class 'str'>\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/root/repo/generation2_robust_system.py\", line 416, in process\n    validated_buffer = self.validator.validate_audio_buffer(audio_buffer)\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/repo/generation2_robust_system.py\", line 231, in validate_audio_buffer\n    raise ValidationError(f\"Audio buffer validation failed: {e}\")\nValidationError: Audio buffer validation failed: Invalid sample type at index 0: <class 'str'>\n"
+    },
+    "performance_degradation": 0.095,
+    "health": "healthy",
+    "recent_errors": 2,
+    "error_rate": 50.0,
+    "throughput_per_second": 4.0,
+    "state": {
+      "hidden": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "power_mw": 0.5,
+      "temperature": 25.0,
+      "cpu_usage": 100
+    },
+    "config": {
+      "min_timestep": 0.001,
+      "max_timestep": 0.05,
+      "energy_threshold": 0.08,
+      "complexity_metric": "spectral_flux",
+      "power_budget_mw": 3.0
+    },
+    "circuit_breaker": {
+      "failed_calls": 0,
+      "last_failure": 0,
+      "state": "closed"
+    },
+    "cache_size": 4
+  },
+  "summary": {
+    "total_tests": 7,
+    "successful": 5,
+    "system_health": "healthy"
+  }
+}

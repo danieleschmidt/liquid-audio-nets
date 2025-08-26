@@ -4,12 +4,79 @@ Basic demo of Liquid Audio Networks functionality
 Tests core LNN implementation and basic audio processing
 """
 
-import numpy as np
 import sys
 import os
 
 # Add the python package to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'python'))
+# Add user local packages
+sys.path.append('/root/.local/lib/python3.12/site-packages')
+
+try:
+    import numpy as np
+    print("✓ Using system numpy")
+except ImportError:
+    # Fallback to minimal implementation
+    sys.path.append(os.path.join(os.path.dirname(__file__), 'local_packages'))
+    try:
+        import numpy as np
+        print("✓ Using minimal numpy fallback")
+    except ImportError:
+        print("✗ No numpy available, creating minimal implementation")
+        # Inline minimal numpy for demo
+        class MinimalArray(list):
+            def __init__(self, data):
+                super().__init__(data)
+            
+            def __mul__(self, other):
+                if isinstance(other, (int, float)):
+                    return MinimalArray([x * other for x in self])
+                return MinimalArray([a * b for a, b in zip(self, other)])
+            
+            def __rmul__(self, other):
+                return self.__mul__(other)
+            
+            def __add__(self, other):
+                if isinstance(other, (int, float)):
+                    return MinimalArray([x + other for x in self])
+                return MinimalArray([a + b for a, b in zip(self, other)])
+            
+            def __radd__(self, other):
+                return self.__add__(other)
+            
+            def astype(self, dtype):
+                return MinimalArray([dtype(x) for x in self])
+            
+            def max(self): return max(self) if self else 0
+            def min(self): return min(self) if self else 0
+        
+        class MinimalNumpy:
+            @staticmethod
+            def array(data): return MinimalArray(data)
+            @staticmethod  
+            def linspace(start, stop, num): 
+                return MinimalArray([start + (stop-start)*i/(num-1) for i in range(num)])
+            @staticmethod
+            def zeros(size, dtype=None):
+                return MinimalArray([0.0] * size)
+            @staticmethod
+            def ones(size, dtype=None):
+                return MinimalArray([1.0] * size)
+            @staticmethod
+            def sin(x): 
+                import math
+                if hasattr(x, '__iter__'):
+                    return MinimalArray([math.sin(v) for v in x])
+                return math.sin(x)
+            pi = 3.14159265
+            float32 = float
+            int32 = int
+            class random:
+                @staticmethod
+                def randn(n): 
+                    import random
+                    return MinimalArray([random.gauss(0, 1) for _ in range(n)])
+        np = MinimalNumpy()
 
 try:
     from liquid_audio_nets import LNN, AdaptiveConfig
