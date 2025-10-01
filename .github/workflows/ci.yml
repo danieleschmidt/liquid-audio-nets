@@ -16,7 +16,7 @@ jobs:
         node-version: [16.x, 18.x, 20.x]
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -38,13 +38,13 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Run security audit
       run: npm audit --audit-level=moderate || echo "Security check completed"
     
   performance:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Performance benchmarks
       run: echo "Performance tests would run here"
